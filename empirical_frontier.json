@@ -1,0 +1,98 @@
+{
+  "interpretation": "Observed lower bound from fully legal games; more search can only expand this frontier.",
+  "runs": [
+    {
+      "checkpoint": "checkpoints/best_score.pt",
+      "mode": "deterministic",
+      "games": 1000,
+      "seed": 120000,
+      "mean_p0": 100.583,
+      "mean_p1": 97.098,
+      "max_individual": 139,
+      "max_combined": 228
+    },
+    {
+      "checkpoint": "checkpoints/best_score.pt",
+      "mode": "stochastic",
+      "games": 1000,
+      "seed": 170000,
+      "mean_p0": 97.945,
+      "mean_p1": 93.902,
+      "max_individual": 140,
+      "max_combined": 233
+    },
+    {
+      "checkpoint": "checkpoints/frontier_final/iteration_131.pt",
+      "mode": "deterministic",
+      "games": 1000,
+      "seed": 220000,
+      "mean_p0": 101.587,
+      "mean_p1": 98.457,
+      "max_individual": 141,
+      "max_combined": 231
+    },
+    {
+      "checkpoint": "checkpoints/frontier_final/iteration_131.pt",
+      "mode": "stochastic",
+      "games": 1000,
+      "seed": 270000,
+      "mean_p0": 98.982,
+      "mean_p1": 95.17,
+      "max_individual": 142,
+      "max_combined": 250
+    }
+  ],
+  "sampled_orientations": 8000,
+  "max_individual_score": 142,
+  "max_combined": {
+    "scores": [
+      111,
+      139
+    ],
+    "total": 250
+  },
+  "max_minimum_player_score": {
+    "scores": [
+      113,
+      113
+    ],
+    "minimum": 113
+  },
+  "pareto_frontier": [
+    {
+      "p0_score": 87,
+      "p1_score": 142,
+      "total": 229
+    },
+    {
+      "p0_score": 111,
+      "p1_score": 139,
+      "total": 250
+    },
+    {
+      "p0_score": 112,
+      "p1_score": 118,
+      "total": 230
+    },
+    {
+      "p0_score": 113,
+      "p1_score": 113,
+      "total": 226
+    },
+    {
+      "p0_score": 118,
+      "p1_score": 112,
+      "total": 230
+    },
+    {
+      "p0_score": 139,
+      "p1_score": 111,
+      "total": 250
+    },
+    {
+      "p0_score": 142,
+      "p1_score": 87,
+      "total": 229
+    }
+  ]
+}

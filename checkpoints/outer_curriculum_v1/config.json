@@ -1,0 +1,13 @@
+{
+  "iterations": 8,
+  "games_per_iteration": 512,
+  "batch_size": 8192,
+  "ppo_epochs": 4,
+  "objective": "score",
+  "shaping_weight": 1.0,
+  "outer_curriculum_weight": 5.0,
+  "learning_rate": 0.00012,
+  "entropy_coef": 0.025,
+  "seed": 2701,
+  "device": "cuda"
+}

@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: azul-summer-pavilion-ai
+Version: 0.1.0
+Summary: Rules-faithful Azul: Summer Pavilion simulator and self-play AI
+Requires-Python: >=3.10
+Requires-Dist: numpy>=1.24
+Requires-Dist: torch>=2.1
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4; extra == "dev"

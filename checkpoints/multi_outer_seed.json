@@ -1,0 +1,10 @@
+{
+  "method": "heuristic curriculum distillation",
+  "teacher": "multi-outer",
+  "teacher_games": 200,
+  "examples": 34715,
+  "epochs": 12,
+  "seed": 9501,
+  "teacher_mean_score": 82.3875,
+  "elapsed_s": 80.8
+}

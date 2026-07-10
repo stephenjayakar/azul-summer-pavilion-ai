@@ -1,0 +1,13 @@
+README.md
+pyproject.toml
+src/azul/__init__.py
+src/azul/agents.py
+src/azul/cli.py
+src/azul/game.py
+src/azul/training.py
+src/azul_summer_pavilion_ai.egg-info/PKG-INFO
+src/azul_summer_pavilion_ai.egg-info/SOURCES.txt
+src/azul_summer_pavilion_ai.egg-info/dependency_links.txt
+src/azul_summer_pavilion_ai.egg-info/requires.txt
+src/azul_summer_pavilion_ai.egg-info/top_level.txt
+tests/test_game.py

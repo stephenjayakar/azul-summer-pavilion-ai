@@ -1,0 +1,14 @@
+{
+  "method": "elite score self-play (CEM)",
+  "resume": "checkpoints/score_v1/latest.pt",
+  "iterations": 8,
+  "games": 512,
+  "quantile": 0.8,
+  "temperature": 1.2,
+  "epochs": 4,
+  "batch_size": 8192,
+  "learning_rate": 0.0001,
+  "entropy_coef": 0.003,
+  "seed": 24001,
+  "device": "cuda"
+}

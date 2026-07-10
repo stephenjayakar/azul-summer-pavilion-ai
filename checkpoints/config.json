@@ -1,0 +1,6 @@
+{
+  "iterations": 60,
+  "games_per_iteration": 64,
+  "seed": 7,
+  "device": "cuda"
+}

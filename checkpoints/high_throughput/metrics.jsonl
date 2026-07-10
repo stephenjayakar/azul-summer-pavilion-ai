@@ -1,0 +1,8 @@
+{"iteration": 2, "steps": 93379, "mean_score": 76.3154296875, "policy_loss": -0.004169730753346812, "value_loss": 0.2801432783404986, "entropy": 0.739765141159296, "elapsed_s": 24.8}
+{"iteration": 3, "steps": 93443, "mean_score": 77.0556640625, "policy_loss": -0.0050423296440082295, "value_loss": 0.18821593560278416, "entropy": 0.7419494725763798, "elapsed_s": 49.8}
+{"iteration": 4, "steps": 93436, "mean_score": 77.56640625, "policy_loss": -0.004810190189649195, "value_loss": 0.1600632881745696, "entropy": 0.7404928194979826, "elapsed_s": 74.0}
+{"iteration": 5, "steps": 93685, "mean_score": 78.21484375, "policy_loss": -0.0057508520694682375, "value_loss": 0.14800375265379748, "entropy": 0.7388391097386678, "elapsed_s": 98.8}
+{"iteration": 6, "steps": 93904, "mean_score": 78.849609375, "policy_loss": -0.005156172192073427, "value_loss": 0.14153073324511448, "entropy": 0.7361574061214924, "elapsed_s": 122.0}
+{"iteration": 7, "steps": 94127, "mean_score": 79.224609375, "policy_loss": -0.005228312023367228, "value_loss": 0.1408199261253079, "entropy": 0.7328721980253855, "elapsed_s": 146.8}
+{"iteration": 8, "steps": 94445, "mean_score": 80.7001953125, "policy_loss": -0.004512742850541447, "value_loss": 0.14030794519931078, "entropy": 0.7296785861253738, "elapsed_s": 171.8}
+{"iteration": 9, "steps": 94477, "mean_score": 80.45703125, "policy_loss": -0.004309758893214166, "value_loss": 0.14307449602832398, "entropy": 0.7280702019731203, "elapsed_s": 195.4}

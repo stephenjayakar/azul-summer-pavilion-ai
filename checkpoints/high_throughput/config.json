@@ -1,0 +1,8 @@
+{
+  "iterations": 9,
+  "games_per_iteration": 512,
+  "batch_size": 8192,
+  "ppo_epochs": 4,
+  "seed": 7,
+  "device": "cuda"
+}

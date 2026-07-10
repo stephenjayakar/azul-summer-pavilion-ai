@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+checkpoints/**/*.pt
+training_runs/
+rule-page-*.png
+page2-hi.png
+board-crop.png
+Azul-Summer-*.jpg
+rules.pdf
+rules.txt

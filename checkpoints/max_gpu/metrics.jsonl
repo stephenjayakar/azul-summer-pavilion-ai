@@ -1,0 +1,2 @@
+{"iteration": 2, "steps": 373346, "mean_score": 76.35205078125, "policy_loss": -0.0038356596536080665, "value_loss": 0.13625910153819454, "entropy": 0.7808868181374338, "elapsed_s": 95.0}
+{"iteration": 3, "steps": 374221, "mean_score": 77.711181640625, "policy_loss": -0.004209964249942762, "value_loss": 0.13481627425385845, "entropy": 0.7729263545738326, "elapsed_s": 191.5}

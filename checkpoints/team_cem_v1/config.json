@@ -1,0 +1,15 @@
+{
+  "method": "elite joint-trajectory CEM",
+  "resume": "checkpoints/best_score.pt",
+  "iterations": 6,
+  "games": 1024,
+  "quantile": 0.9,
+  "temperature": 1.5,
+  "individual_weight": 0.25,
+  "epochs": 4,
+  "batch_size": 8192,
+  "learning_rate": 6e-05,
+  "entropy_coef": 0.004,
+  "seed": 31001,
+  "device": "cuda"
+}

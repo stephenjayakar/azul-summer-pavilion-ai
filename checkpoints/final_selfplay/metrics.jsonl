@@ -1,0 +1,12 @@
+{"iteration": 4, "steps": 94024, "mean_score": 78.91015625, "policy_loss": -0.005652477916252489, "value_loss": 0.13535341698055467, "entropy": 0.7655726745724678, "elapsed_s": 23.8}
+{"iteration": 5, "steps": 94035, "mean_score": 79.9375, "policy_loss": -0.005867245546445095, "value_loss": 0.13519078803559145, "entropy": 0.7573071668545405, "elapsed_s": 47.4}
+{"iteration": 6, "steps": 94347, "mean_score": 80.4677734375, "policy_loss": -0.005248324067603487, "value_loss": 0.13066527154296637, "entropy": 0.7529000664750735, "elapsed_s": 78.4}
+{"iteration": 7, "steps": 94700, "mean_score": 81.5478515625, "policy_loss": -0.005282572203820261, "value_loss": 0.14027690049260855, "entropy": 0.7469410585860411, "elapsed_s": 102.0}
+{"iteration": 8, "steps": 94857, "mean_score": 82.1572265625, "policy_loss": -0.005135572175883378, "value_loss": 0.13075874016309777, "entropy": 0.7403533458709717, "elapsed_s": 128.8}
+{"iteration": 9, "steps": 94750, "mean_score": 82.0654296875, "policy_loss": -0.00459161112151681, "value_loss": 0.12866524637987217, "entropy": 0.738046738008658, "elapsed_s": 153.0}
+{"iteration": 10, "steps": 94931, "mean_score": 82.28515625, "policy_loss": -0.005143490280412759, "value_loss": 0.12926703582828244, "entropy": 0.7347601925333341, "elapsed_s": 177.6}
+{"iteration": 11, "steps": 94711, "mean_score": 83.0751953125, "policy_loss": -0.005327914885128848, "value_loss": 0.13298255065456033, "entropy": 0.7251114137470722, "elapsed_s": 201.0}
+{"iteration": 12, "steps": 95070, "mean_score": 83.35546875, "policy_loss": -0.00532526212433974, "value_loss": 0.12546257364253202, "entropy": 0.7212153077125549, "elapsed_s": 224.0}
+{"iteration": 13, "steps": 94860, "mean_score": 82.91015625, "policy_loss": -0.0050219780920694275, "value_loss": 0.13635541157176098, "entropy": 0.7133467433353265, "elapsed_s": 247.4}
+{"iteration": 14, "steps": 94931, "mean_score": 83.412109375, "policy_loss": -0.005355065373199371, "value_loss": 0.13231197030593952, "entropy": 0.7056821237007777, "elapsed_s": 271.7}
+{"iteration": 15, "steps": 95313, "mean_score": 84.6982421875, "policy_loss": -0.005083279461056615, "value_loss": 0.12591896019876003, "entropy": 0.7044893155495325, "elapsed_s": 297.1}

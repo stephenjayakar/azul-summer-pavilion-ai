@@ -1,0 +1,3360 @@
+{
+  "board_ceiling": {
+    "score": 304,
+    "placement_score": 147,
+    "final_bonus": 152,
+    "gross_cost": 147,
+    "feature_tiles": 36,
+    "net_cost": 111,
+    "placed_spaces": 42,
+    "masks": [
+      63,
+      63,
+      63,
+      63,
+      63,
+      63,
+      63
+    ],
+    "completed_outer_stars": [
+      "purple",
+      "green",
+      "orange",
+      "yellow",
+      "blue",
+      "red"
+    ],
+    "center_complete": true,
+    "completed_numbers": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "completed_features": [
+      "window_0",
+      "statue_0",
+      "pillar_0",
+      "window_1",
+      "statue_1",
+      "pillar_1",
+      "window_2",
+      "statue_2",
+      "pillar_2",
+      "window_3",
+      "statue_3",
+      "pillar_3",
+      "window_4",
+      "statue_4",
+      "pillar_4",
+      "window_5",
+      "statue_5",
+      "pillar_5"
+    ]
+  },
+  "interpretation": {
+    "board_ceiling": "Exact maximum permitted by printed board scoring before game-flow feasibility.",
+    "single_board_frontier": "Exact score maximum for each relaxed net tile budget.",
+    "two_player_frontier": "Optimistic upper bound using 120 shared factory tiles plus feature rebates; color, rounds, supply timing, and alternating drafts are relaxed."
+  },
+  "single_board_frontier": [
+    {
+      "score": 5,
+      "placement_score": 0,
+      "final_bonus": 0,
+      "gross_cost": 0,
+      "feature_tiles": 0,
+      "net_cost": 0,
+      "placed_spaces": 0,
+      "masks": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "completed_outer_stars": [],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [],
+      "net_budget": 0
+    },
+    {
+      "score": 6,
+      "placement_score": 1,
+      "final_bonus": 0,
+      "gross_cost": 1,
+      "feature_tiles": 0,
+      "net_cost": 1,
+      "placed_spaces": 1,
+      "masks": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "completed_outer_stars": [],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [],
+      "net_budget": 1
+    },
+    {
+      "score": 7,
+      "placement_score": 2,
+      "final_bonus": 0,
+      "gross_cost": 2,
+      "feature_tiles": 0,
+      "net_cost": 2,
+      "placed_spaces": 2,
+      "masks": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "completed_outer_stars": [],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [],
+      "net_budget": 2
+    },
+    {
+      "score": 8,
+      "placement_score": 3,
+      "final_bonus": 0,
+      "gross_cost": 3,
+      "feature_tiles": 0,
+      "net_cost": 3,
+      "placed_spaces": 3,
+      "masks": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "completed_outer_stars": [],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [],
+      "net_budget": 3
+    },
+    {
+      "score": 9,
+      "placement_score": 4,
+      "final_bonus": 0,
+      "gross_cost": 4,
+      "feature_tiles": 0,
+      "net_cost": 4,
+      "placed_spaces": 4,
+      "masks": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "completed_outer_stars": [],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [],
+      "net_budget": 4
+    },
+    {
+      "score": 10,
+      "placement_score": 5,
+      "final_bonus": 0,
+      "gross_cost": 5,
+      "feature_tiles": 0,
+      "net_cost": 5,
+      "placed_spaces": 4,
+      "masks": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        3
+      ],
+      "completed_outer_stars": [],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [],
+      "net_budget": 5
+    },
+    {
+      "score": 11,
+      "placement_score": 6,
+      "final_bonus": 0,
+      "gross_cost": 6,
+      "feature_tiles": 0,
+      "net_cost": 6,
+      "placed_spaces": 3,
+      "masks": [
+        0,
+        7,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "completed_outer_stars": [],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [],
+      "net_budget": 6
+    },
+    {
+      "score": 16,
+      "placement_score": 7,
+      "final_bonus": 4,
+      "gross_cost": 7,
+      "feature_tiles": 0,
+      "net_cost": 7,
+      "placed_spaces": 7,
+      "masks": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "completed_outer_stars": [],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [],
+      "net_budget": 7
+    },
+    {
+      "score": 18,
+      "placement_score": 9,
+      "final_bonus": 4,
+      "gross_cost": 9,
+      "feature_tiles": 0,
+      "net_cost": 9,
+      "placed_spaces": 8,
+      "masks": [
+        1,
+        1,
+        1,
+        3,
+        1,
+        1,
+        1
+      ],
+      "completed_outer_stars": [],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [],
+      "net_budget": 9
+    },
+    {
+      "score": 20,
+      "placement_score": 11,
+      "final_bonus": 4,
+      "gross_cost": 11,
+      "feature_tiles": 0,
+      "net_cost": 11,
+      "placed_spaces": 9,
+      "masks": [
+        1,
+        1,
+        3,
+        1,
+        1,
+        1,
+        3
+      ],
+      "completed_outer_stars": [],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [],
+      "net_budget": 11
+    },
+    {
+      "score": 21,
+      "placement_score": 12,
+      "final_bonus": 4,
+      "gross_cost": 12,
+      "feature_tiles": 0,
+      "net_cost": 12,
+      "placed_spaces": 9,
+      "masks": [
+        1,
+        1,
+        1,
+        1,
+        7,
+        1,
+        1
+      ],
+      "completed_outer_stars": [],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [],
+      "net_budget": 12
+    },
+    {
+      "score": 23,
+      "placement_score": 14,
+      "final_bonus": 4,
+      "gross_cost": 14,
+      "feature_tiles": 1,
+      "net_cost": 13,
+      "placed_spaces": 10,
+      "masks": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        7,
+        3
+      ],
+      "completed_outer_stars": [],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [
+        "pillar_1"
+      ],
+      "net_budget": 13
+    },
+    {
+      "score": 25,
+      "placement_score": 16,
+      "final_bonus": 4,
+      "gross_cost": 16,
+      "feature_tiles": 1,
+      "net_cost": 15,
+      "placed_spaces": 11,
+      "masks": [
+        1,
+        3,
+        1,
+        1,
+        1,
+        7,
+        3
+      ],
+      "completed_outer_stars": [],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [
+        "pillar_1"
+      ],
+      "net_budget": 15
+    },
+    {
+      "score": 27,
+      "placement_score": 18,
+      "final_bonus": 4,
+      "gross_cost": 18,
+      "feature_tiles": 2,
+      "net_cost": 16,
+      "placed_spaces": 11,
+      "masks": [
+        1,
+        1,
+        3,
+        1,
+        1,
+        15,
+        1
+      ],
+      "completed_outer_stars": [],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [
+        "statue_0"
+      ],
+      "net_budget": 16
+    },
+    {
+      "score": 29,
+      "placement_score": 20,
+      "final_bonus": 4,
+      "gross_cost": 20,
+      "feature_tiles": 3,
+      "net_cost": 17,
+      "placed_spaces": 12,
+      "masks": [
+        1,
+        1,
+        3,
+        1,
+        1,
+        15,
+        3
+      ],
+      "completed_outer_stars": [],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [
+        "statue_0",
+        "pillar_1"
+      ],
+      "net_budget": 17
+    },
+    {
+      "score": 46,
+      "placement_score": 21,
+      "final_bonus": 20,
+      "gross_cost": 21,
+      "feature_tiles": 3,
+      "net_cost": 18,
+      "placed_spaces": 6,
+      "masks": [
+        63,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "completed_outer_stars": [
+        "purple"
+      ],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [
+        "window_5"
+      ],
+      "net_budget": 18
+    },
+    {
+      "score": 49,
+      "placement_score": 24,
+      "final_bonus": 20,
+      "gross_cost": 24,
+      "feature_tiles": 5,
+      "net_cost": 19,
+      "placed_spaces": 8,
+      "masks": [
+        63,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "completed_outer_stars": [
+        "purple"
+      ],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 19
+    },
+    {
+      "score": 50,
+      "placement_score": 25,
+      "final_bonus": 20,
+      "gross_cost": 25,
+      "feature_tiles": 5,
+      "net_cost": 20,
+      "placed_spaces": 9,
+      "masks": [
+        63,
+        3,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "completed_outer_stars": [
+        "purple"
+      ],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 20
+    },
+    {
+      "score": 51,
+      "placement_score": 26,
+      "final_bonus": 20,
+      "gross_cost": 26,
+      "feature_tiles": 5,
+      "net_cost": 21,
+      "placed_spaces": 10,
+      "masks": [
+        63,
+        3,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "completed_outer_stars": [
+        "purple"
+      ],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 21
+    },
+    {
+      "score": 52,
+      "placement_score": 27,
+      "final_bonus": 20,
+      "gross_cost": 27,
+      "feature_tiles": 5,
+      "net_cost": 22,
+      "placed_spaces": 11,
+      "masks": [
+        63,
+        3,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
+      "completed_outer_stars": [
+        "purple"
+      ],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 22
+    },
+    {
+      "score": 53,
+      "placement_score": 28,
+      "final_bonus": 20,
+      "gross_cost": 28,
+      "feature_tiles": 5,
+      "net_cost": 23,
+      "placed_spaces": 11,
+      "masks": [
+        63,
+        3,
+        3,
+        0,
+        0,
+        1,
+        0
+      ],
+      "completed_outer_stars": [
+        "purple"
+      ],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 23
+    },
+    {
+      "score": 58,
+      "placement_score": 29,
+      "final_bonus": 24,
+      "gross_cost": 29,
+      "feature_tiles": 5,
+      "net_cost": 24,
+      "placed_spaces": 13,
+      "masks": [
+        63,
+        3,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "completed_outer_stars": [
+        "purple"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 24
+    },
+    {
+      "score": 60,
+      "placement_score": 31,
+      "final_bonus": 24,
+      "gross_cost": 31,
+      "feature_tiles": 5,
+      "net_cost": 26,
+      "placed_spaces": 14,
+      "masks": [
+        63,
+        3,
+        1,
+        1,
+        1,
+        1,
+        3
+      ],
+      "completed_outer_stars": [
+        "purple"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 26
+    },
+    {
+      "score": 61,
+      "placement_score": 32,
+      "final_bonus": 24,
+      "gross_cost": 32,
+      "feature_tiles": 5,
+      "net_cost": 27,
+      "placed_spaces": 14,
+      "masks": [
+        63,
+        7,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "completed_outer_stars": [
+        "purple"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 27
+    },
+    {
+      "score": 62,
+      "placement_score": 33,
+      "final_bonus": 24,
+      "gross_cost": 33,
+      "feature_tiles": 5,
+      "net_cost": 28,
+      "placed_spaces": 15,
+      "masks": [
+        63,
+        3,
+        1,
+        1,
+        3,
+        1,
+        3
+      ],
+      "completed_outer_stars": [
+        "purple"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 28
+    },
+    {
+      "score": 63,
+      "placement_score": 34,
+      "final_bonus": 24,
+      "gross_cost": 34,
+      "feature_tiles": 5,
+      "net_cost": 29,
+      "placed_spaces": 15,
+      "masks": [
+        63,
+        3,
+        1,
+        7,
+        1,
+        1,
+        1
+      ],
+      "completed_outer_stars": [
+        "purple"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 29
+    },
+    {
+      "score": 65,
+      "placement_score": 36,
+      "final_bonus": 24,
+      "gross_cost": 36,
+      "feature_tiles": 6,
+      "net_cost": 30,
+      "placed_spaces": 16,
+      "masks": [
+        63,
+        3,
+        1,
+        1,
+        1,
+        7,
+        3
+      ],
+      "completed_outer_stars": [
+        "purple"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [
+        "pillar_1",
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 30
+    },
+    {
+      "score": 67,
+      "placement_score": 38,
+      "final_bonus": 24,
+      "gross_cost": 38,
+      "feature_tiles": 7,
+      "net_cost": 31,
+      "placed_spaces": 16,
+      "masks": [
+        63,
+        3,
+        15,
+        1,
+        1,
+        1,
+        1
+      ],
+      "completed_outer_stars": [
+        "purple"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 31
+    },
+    {
+      "score": 68,
+      "placement_score": 35,
+      "final_bonus": 28,
+      "gross_cost": 37,
+      "feature_tiles": 5,
+      "net_cost": 32,
+      "placed_spaces": 16,
+      "masks": [
+        63,
+        3,
+        3,
+        2,
+        2,
+        3,
+        3
+      ],
+      "completed_outer_stars": [
+        "purple"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        2
+      ],
+      "completed_features": [
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 32
+    },
+    {
+      "score": 70,
+      "placement_score": 37,
+      "final_bonus": 28,
+      "gross_cost": 38,
+      "feature_tiles": 5,
+      "net_cost": 33,
+      "placed_spaces": 17,
+      "masks": [
+        63,
+        3,
+        2,
+        3,
+        3,
+        3,
+        3
+      ],
+      "completed_outer_stars": [
+        "purple"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        2
+      ],
+      "completed_features": [
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 33
+    },
+    {
+      "score": 85,
+      "placement_score": 42,
+      "final_bonus": 38,
+      "gross_cost": 42,
+      "feature_tiles": 8,
+      "net_cost": 34,
+      "placed_spaces": 12,
+      "masks": [
+        63,
+        63,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green"
+      ],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [
+        "window_4",
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 34
+    },
+    {
+      "score": 88,
+      "placement_score": 45,
+      "final_bonus": 38,
+      "gross_cost": 45,
+      "feature_tiles": 10,
+      "net_cost": 35,
+      "placed_spaces": 14,
+      "masks": [
+        63,
+        63,
+        0,
+        3,
+        0,
+        0,
+        0
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green"
+      ],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 35
+    },
+    {
+      "score": 89,
+      "placement_score": 46,
+      "final_bonus": 38,
+      "gross_cost": 46,
+      "feature_tiles": 10,
+      "net_cost": 36,
+      "placed_spaces": 15,
+      "masks": [
+        63,
+        63,
+        0,
+        3,
+        1,
+        0,
+        0
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green"
+      ],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 36
+    },
+    {
+      "score": 90,
+      "placement_score": 47,
+      "final_bonus": 38,
+      "gross_cost": 47,
+      "feature_tiles": 10,
+      "net_cost": 37,
+      "placed_spaces": 16,
+      "masks": [
+        63,
+        63,
+        0,
+        3,
+        1,
+        1,
+        0
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green"
+      ],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 37
+    },
+    {
+      "score": 91,
+      "placement_score": 48,
+      "final_bonus": 38,
+      "gross_cost": 48,
+      "feature_tiles": 10,
+      "net_cost": 38,
+      "placed_spaces": 17,
+      "masks": [
+        63,
+        63,
+        1,
+        3,
+        0,
+        1,
+        1
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green"
+      ],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 38
+    },
+    {
+      "score": 96,
+      "placement_score": 49,
+      "final_bonus": 42,
+      "gross_cost": 49,
+      "feature_tiles": 10,
+      "net_cost": 39,
+      "placed_spaces": 18,
+      "masks": [
+        63,
+        63,
+        1,
+        3,
+        1,
+        1,
+        1
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 39
+    },
+    {
+      "score": 98,
+      "placement_score": 51,
+      "final_bonus": 42,
+      "gross_cost": 51,
+      "feature_tiles": 10,
+      "net_cost": 41,
+      "placed_spaces": 19,
+      "masks": [
+        63,
+        63,
+        1,
+        3,
+        3,
+        1,
+        1
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 41
+    },
+    {
+      "score": 99,
+      "placement_score": 52,
+      "final_bonus": 42,
+      "gross_cost": 52,
+      "feature_tiles": 10,
+      "net_cost": 42,
+      "placed_spaces": 19,
+      "masks": [
+        63,
+        63,
+        1,
+        7,
+        1,
+        1,
+        1
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 42
+    },
+    {
+      "score": 100,
+      "placement_score": 53,
+      "final_bonus": 42,
+      "gross_cost": 53,
+      "feature_tiles": 10,
+      "net_cost": 43,
+      "placed_spaces": 20,
+      "masks": [
+        63,
+        63,
+        3,
+        3,
+        3,
+        1,
+        1
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 43
+    },
+    {
+      "score": 102,
+      "placement_score": 51,
+      "final_bonus": 46,
+      "gross_cost": 54,
+      "feature_tiles": 10,
+      "net_cost": 44,
+      "placed_spaces": 19,
+      "masks": [
+        63,
+        63,
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        2
+      ],
+      "completed_features": [
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 44
+    },
+    {
+      "score": 104,
+      "placement_score": 53,
+      "final_bonus": 46,
+      "gross_cost": 55,
+      "feature_tiles": 10,
+      "net_cost": 45,
+      "placed_spaces": 20,
+      "masks": [
+        63,
+        63,
+        3,
+        3,
+        2,
+        3,
+        2
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        2
+      ],
+      "completed_features": [
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 45
+    },
+    {
+      "score": 108,
+      "placement_score": 57,
+      "final_bonus": 46,
+      "gross_cost": 57,
+      "feature_tiles": 11,
+      "net_cost": 46,
+      "placed_spaces": 22,
+      "masks": [
+        63,
+        3,
+        3,
+        3,
+        3,
+        63,
+        3
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "red"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2
+      ],
+      "completed_features": [
+        "statue_0",
+        "window_1",
+        "pillar_1",
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 46
+    },
+    {
+      "score": 112,
+      "placement_score": 57,
+      "final_bonus": 50,
+      "gross_cost": 57,
+      "feature_tiles": 10,
+      "net_cost": 47,
+      "placed_spaces": 22,
+      "masks": [
+        63,
+        63,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2
+      ],
+      "completed_features": [
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 47
+    },
+    {
+      "score": 115,
+      "placement_score": 60,
+      "final_bonus": 50,
+      "gross_cost": 60,
+      "feature_tiles": 11,
+      "net_cost": 49,
+      "placed_spaces": 23,
+      "masks": [
+        63,
+        63,
+        3,
+        3,
+        3,
+        7,
+        3
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2
+      ],
+      "completed_features": [
+        "pillar_1",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 49
+    },
+    {
+      "score": 123,
+      "placement_score": 63,
+      "final_bonus": 55,
+      "gross_cost": 63,
+      "feature_tiles": 13,
+      "net_cost": 50,
+      "placed_spaces": 18,
+      "masks": [
+        63,
+        63,
+        63,
+        0,
+        0,
+        0,
+        0
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange"
+      ],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [
+        "window_0",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 50
+    },
+    {
+      "score": 126,
+      "placement_score": 66,
+      "final_bonus": 55,
+      "gross_cost": 66,
+      "feature_tiles": 15,
+      "net_cost": 51,
+      "placed_spaces": 20,
+      "masks": [
+        63,
+        63,
+        63,
+        3,
+        0,
+        0,
+        0
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange"
+      ],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [
+        "window_0",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 51
+    },
+    {
+      "score": 127,
+      "placement_score": 67,
+      "final_bonus": 55,
+      "gross_cost": 67,
+      "feature_tiles": 15,
+      "net_cost": 52,
+      "placed_spaces": 21,
+      "masks": [
+        63,
+        63,
+        63,
+        3,
+        0,
+        1,
+        0
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange"
+      ],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [
+        "window_0",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 52
+    },
+    {
+      "score": 128,
+      "placement_score": 68,
+      "final_bonus": 55,
+      "gross_cost": 68,
+      "feature_tiles": 15,
+      "net_cost": 53,
+      "placed_spaces": 22,
+      "masks": [
+        63,
+        63,
+        63,
+        3,
+        1,
+        0,
+        1
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange"
+      ],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [
+        "window_0",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 53
+    },
+    {
+      "score": 133,
+      "placement_score": 69,
+      "final_bonus": 59,
+      "gross_cost": 69,
+      "feature_tiles": 15,
+      "net_cost": 54,
+      "placed_spaces": 23,
+      "masks": [
+        63,
+        63,
+        63,
+        3,
+        1,
+        1,
+        1
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 54
+    },
+    {
+      "score": 135,
+      "placement_score": 71,
+      "final_bonus": 59,
+      "gross_cost": 71,
+      "feature_tiles": 15,
+      "net_cost": 56,
+      "placed_spaces": 24,
+      "masks": [
+        63,
+        63,
+        63,
+        3,
+        3,
+        1,
+        1
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 56
+    },
+    {
+      "score": 137,
+      "placement_score": 69,
+      "final_bonus": 63,
+      "gross_cost": 72,
+      "feature_tiles": 15,
+      "net_cost": 57,
+      "placed_spaces": 23,
+      "masks": [
+        63,
+        63,
+        63,
+        3,
+        2,
+        2,
+        2
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        2
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 57
+    },
+    {
+      "score": 139,
+      "placement_score": 71,
+      "final_bonus": 63,
+      "gross_cost": 73,
+      "feature_tiles": 15,
+      "net_cost": 58,
+      "placed_spaces": 24,
+      "masks": [
+        63,
+        63,
+        63,
+        3,
+        3,
+        2,
+        2
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        2
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 58
+    },
+    {
+      "score": 144,
+      "placement_score": 75,
+      "final_bonus": 64,
+      "gross_cost": 75,
+      "feature_tiles": 16,
+      "net_cost": 59,
+      "placed_spaces": 26,
+      "masks": [
+        63,
+        63,
+        3,
+        3,
+        3,
+        63,
+        3
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "red"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2
+      ],
+      "completed_features": [
+        "statue_0",
+        "window_1",
+        "pillar_1",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5"
+      ],
+      "net_budget": 59
+    },
+    {
+      "score": 147,
+      "placement_score": 75,
+      "final_bonus": 67,
+      "gross_cost": 75,
+      "feature_tiles": 15,
+      "net_cost": 60,
+      "placed_spaces": 26,
+      "masks": [
+        63,
+        63,
+        63,
+        3,
+        3,
+        3,
+        3
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 60
+    },
+    {
+      "score": 150,
+      "placement_score": 78,
+      "final_bonus": 67,
+      "gross_cost": 78,
+      "feature_tiles": 16,
+      "net_cost": 62,
+      "placed_spaces": 27,
+      "masks": [
+        63,
+        63,
+        63,
+        3,
+        3,
+        7,
+        3
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2
+      ],
+      "completed_features": [
+        "window_0",
+        "pillar_1",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 62
+    },
+    {
+      "score": 154,
+      "placement_score": 82,
+      "final_bonus": 67,
+      "gross_cost": 82,
+      "feature_tiles": 18,
+      "net_cost": 64,
+      "placed_spaces": 28,
+      "masks": [
+        63,
+        63,
+        63,
+        3,
+        3,
+        15,
+        3
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_0",
+        "pillar_1",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 64
+    },
+    {
+      "score": 160,
+      "placement_score": 84,
+      "final_bonus": 71,
+      "gross_cost": 84,
+      "feature_tiles": 18,
+      "net_cost": 66,
+      "placed_spaces": 24,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        0,
+        0,
+        0
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow"
+      ],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [
+        "window_0",
+        "window_3",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 66
+    },
+    {
+      "score": 163,
+      "placement_score": 87,
+      "final_bonus": 71,
+      "gross_cost": 87,
+      "feature_tiles": 20,
+      "net_cost": 67,
+      "placed_spaces": 26,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        3,
+        0,
+        0
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow"
+      ],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [
+        "window_0",
+        "statue_2",
+        "window_3",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 67
+    },
+    {
+      "score": 164,
+      "placement_score": 88,
+      "final_bonus": 71,
+      "gross_cost": 88,
+      "feature_tiles": 20,
+      "net_cost": 68,
+      "placed_spaces": 27,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        3,
+        1,
+        0
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow"
+      ],
+      "center_complete": false,
+      "completed_numbers": [],
+      "completed_features": [
+        "window_0",
+        "statue_2",
+        "window_3",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 68
+    },
+    {
+      "score": 169,
+      "placement_score": 89,
+      "final_bonus": 75,
+      "gross_cost": 89,
+      "feature_tiles": 20,
+      "net_cost": 69,
+      "placed_spaces": 28,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        3,
+        1,
+        1
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_2",
+        "window_3",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 69
+    },
+    {
+      "score": 171,
+      "placement_score": 87,
+      "final_bonus": 79,
+      "gross_cost": 87,
+      "feature_tiles": 17,
+      "net_cost": 70,
+      "placed_spaces": 30,
+      "masks": [
+        63,
+        63,
+        63,
+        7,
+        7,
+        7,
+        7
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2,
+        3
+      ],
+      "completed_features": [
+        "window_0",
+        "pillar_1",
+        "pillar_2",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 70
+    },
+    {
+      "score": 175,
+      "placement_score": 92,
+      "final_bonus": 78,
+      "gross_cost": 92,
+      "feature_tiles": 21,
+      "net_cost": 71,
+      "placed_spaces": 32,
+      "masks": [
+        63,
+        63,
+        15,
+        15,
+        15,
+        15,
+        15
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "completed_features": [
+        "statue_0",
+        "statue_1",
+        "pillar_1",
+        "statue_2",
+        "pillar_2",
+        "statue_3",
+        "pillar_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 71
+    },
+    {
+      "score": 179,
+      "placement_score": 93,
+      "final_bonus": 81,
+      "gross_cost": 93,
+      "feature_tiles": 21,
+      "net_cost": 72,
+      "placed_spaces": 30,
+      "masks": [
+        63,
+        63,
+        63,
+        3,
+        3,
+        63,
+        3
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "red"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_0",
+        "window_1",
+        "pillar_1",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 72
+    },
+    {
+      "score": 181,
+      "placement_score": 93,
+      "final_bonus": 83,
+      "gross_cost": 93,
+      "feature_tiles": 20,
+      "net_cost": 73,
+      "placed_spaces": 30,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        3,
+        3,
+        3
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_2",
+        "window_3",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 73
+    },
+    {
+      "score": 184,
+      "placement_score": 96,
+      "final_bonus": 83,
+      "gross_cost": 96,
+      "feature_tiles": 21,
+      "net_cost": 75,
+      "placed_spaces": 31,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        3,
+        7,
+        3
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2
+      ],
+      "completed_features": [
+        "window_0",
+        "pillar_1",
+        "statue_2",
+        "window_3",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 75
+    },
+    {
+      "score": 188,
+      "placement_score": 100,
+      "final_bonus": 83,
+      "gross_cost": 100,
+      "feature_tiles": 23,
+      "net_cost": 77,
+      "placed_spaces": 32,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        3,
+        15,
+        3
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_0",
+        "pillar_1",
+        "statue_2",
+        "window_3",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 77
+    },
+    {
+      "score": 203,
+      "placement_score": 103,
+      "final_bonus": 95,
+      "gross_cost": 103,
+      "feature_tiles": 24,
+      "net_cost": 79,
+      "placed_spaces": 34,
+      "masks": [
+        63,
+        63,
+        63,
+        15,
+        15,
+        15,
+        15
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_0",
+        "statue_1",
+        "pillar_1",
+        "statue_2",
+        "pillar_2",
+        "statue_3",
+        "pillar_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 79
+    },
+    {
+      "score": 206,
+      "placement_score": 106,
+      "final_bonus": 95,
+      "gross_cost": 106,
+      "feature_tiles": 24,
+      "net_cost": 82,
+      "placed_spaces": 34,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        7,
+        15,
+        7
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2,
+        3
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_0",
+        "pillar_1",
+        "statue_2",
+        "pillar_2",
+        "window_3",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 82
+    },
+    {
+      "score": 208,
+      "placement_score": 108,
+      "final_bonus": 95,
+      "gross_cost": 108,
+      "feature_tiles": 25,
+      "net_cost": 83,
+      "placed_spaces": 35,
+      "masks": [
+        63,
+        63,
+        63,
+        15,
+        15,
+        15,
+        31
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_0",
+        "statue_1",
+        "pillar_1",
+        "statue_2",
+        "pillar_2",
+        "statue_3",
+        "pillar_3",
+        "window_4",
+        "statue_4",
+        "pillar_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 83
+    },
+    {
+      "score": 210,
+      "placement_score": 110,
+      "final_bonus": 95,
+      "gross_cost": 110,
+      "feature_tiles": 26,
+      "net_cost": 84,
+      "placed_spaces": 35,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        15,
+        15,
+        7
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2,
+        3
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_0",
+        "statue_1",
+        "pillar_1",
+        "statue_2",
+        "pillar_2",
+        "window_3",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 84
+    },
+    {
+      "score": 213,
+      "placement_score": 111,
+      "final_bonus": 97,
+      "gross_cost": 111,
+      "feature_tiles": 26,
+      "net_cost": 85,
+      "placed_spaces": 34,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        3,
+        63,
+        3
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow",
+        "red"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_0",
+        "window_1",
+        "pillar_1",
+        "statue_2",
+        "window_3",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 85
+    },
+    {
+      "score": 214,
+      "placement_score": 111,
+      "final_bonus": 98,
+      "gross_cost": 111,
+      "feature_tiles": 25,
+      "net_cost": 86,
+      "placed_spaces": 34,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        63,
+        3,
+        3
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow",
+        "blue"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_1",
+        "window_2",
+        "statue_2",
+        "window_3",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 86
+    },
+    {
+      "score": 230,
+      "placement_score": 114,
+      "final_bonus": 111,
+      "gross_cost": 114,
+      "feature_tiles": 27,
+      "net_cost": 87,
+      "placed_spaces": 36,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        15,
+        15,
+        15
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_0",
+        "statue_1",
+        "pillar_1",
+        "statue_2",
+        "pillar_2",
+        "window_3",
+        "statue_3",
+        "pillar_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 87
+    },
+    {
+      "score": 232,
+      "placement_score": 117,
+      "final_bonus": 110,
+      "gross_cost": 117,
+      "feature_tiles": 27,
+      "net_cost": 90,
+      "placed_spaces": 36,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        63,
+        7,
+        7
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow",
+        "blue"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2,
+        3
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_1",
+        "pillar_1",
+        "window_2",
+        "statue_2",
+        "pillar_2",
+        "window_3",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 90
+    },
+    {
+      "score": 235,
+      "placement_score": 119,
+      "final_bonus": 111,
+      "gross_cost": 119,
+      "feature_tiles": 28,
+      "net_cost": 91,
+      "placed_spaces": 37,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        15,
+        15,
+        31
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_0",
+        "statue_1",
+        "pillar_1",
+        "statue_2",
+        "pillar_2",
+        "window_3",
+        "statue_3",
+        "pillar_3",
+        "window_4",
+        "statue_4",
+        "pillar_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 91
+    },
+    {
+      "score": 236,
+      "placement_score": 121,
+      "final_bonus": 110,
+      "gross_cost": 121,
+      "feature_tiles": 29,
+      "net_cost": 92,
+      "placed_spaces": 37,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        63,
+        15,
+        7
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow",
+        "blue"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2,
+        3
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_0",
+        "statue_1",
+        "pillar_1",
+        "window_2",
+        "statue_2",
+        "pillar_2",
+        "window_3",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 92
+    },
+    {
+      "score": 238,
+      "placement_score": 119,
+      "final_bonus": 114,
+      "gross_cost": 122,
+      "feature_tiles": 28,
+      "net_cost": 94,
+      "placed_spaces": 37,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        63,
+        15,
+        11
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow",
+        "blue"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2,
+        4
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_0",
+        "statue_1",
+        "pillar_1",
+        "window_2",
+        "statue_2",
+        "window_3",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 94
+    },
+    {
+      "score": 256,
+      "placement_score": 125,
+      "final_bonus": 126,
+      "gross_cost": 125,
+      "feature_tiles": 30,
+      "net_cost": 95,
+      "placed_spaces": 38,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        63,
+        15,
+        15
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow",
+        "blue"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_0",
+        "statue_1",
+        "pillar_1",
+        "window_2",
+        "statue_2",
+        "pillar_2",
+        "window_3",
+        "statue_3",
+        "pillar_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 95
+    },
+    {
+      "score": 261,
+      "placement_score": 130,
+      "final_bonus": 126,
+      "gross_cost": 130,
+      "feature_tiles": 31,
+      "net_cost": 99,
+      "placed_spaces": 39,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        63,
+        15,
+        31
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow",
+        "blue"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_0",
+        "statue_1",
+        "pillar_1",
+        "window_2",
+        "statue_2",
+        "pillar_2",
+        "window_3",
+        "statue_3",
+        "pillar_3",
+        "window_4",
+        "statue_4",
+        "pillar_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 99
+    },
+    {
+      "score": 263,
+      "placement_score": 130,
+      "final_bonus": 128,
+      "gross_cost": 133,
+      "feature_tiles": 31,
+      "net_cost": 102,
+      "placed_spaces": 39,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        63,
+        63,
+        11
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow",
+        "blue",
+        "red"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2,
+        4
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_0",
+        "window_1",
+        "statue_1",
+        "pillar_1",
+        "window_2",
+        "statue_2",
+        "window_3",
+        "statue_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 102
+    },
+    {
+      "score": 281,
+      "placement_score": 136,
+      "final_bonus": 140,
+      "gross_cost": 136,
+      "feature_tiles": 33,
+      "net_cost": 103,
+      "placed_spaces": 40,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        63,
+        63,
+        15
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow",
+        "blue",
+        "red"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_0",
+        "window_1",
+        "statue_1",
+        "pillar_1",
+        "window_2",
+        "statue_2",
+        "pillar_2",
+        "window_3",
+        "statue_3",
+        "pillar_3",
+        "window_4",
+        "statue_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 103
+    },
+    {
+      "score": 286,
+      "placement_score": 141,
+      "final_bonus": 140,
+      "gross_cost": 141,
+      "feature_tiles": 34,
+      "net_cost": 107,
+      "placed_spaces": 41,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        63,
+        63,
+        31
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow",
+        "blue",
+        "red"
+      ],
+      "center_complete": false,
+      "completed_numbers": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_0",
+        "window_1",
+        "statue_1",
+        "pillar_1",
+        "window_2",
+        "statue_2",
+        "pillar_2",
+        "window_3",
+        "statue_3",
+        "pillar_3",
+        "window_4",
+        "statue_4",
+        "pillar_4",
+        "window_5",
+        "statue_5"
+      ],
+      "net_budget": 107
+    },
+    {
+      "score": 304,
+      "placement_score": 147,
+      "final_bonus": 152,
+      "gross_cost": 147,
+      "feature_tiles": 36,
+      "net_cost": 111,
+      "placed_spaces": 42,
+      "masks": [
+        63,
+        63,
+        63,
+        63,
+        63,
+        63,
+        63
+      ],
+      "completed_outer_stars": [
+        "purple",
+        "green",
+        "orange",
+        "yellow",
+        "blue",
+        "red"
+      ],
+      "center_complete": true,
+      "completed_numbers": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "completed_features": [
+        "window_0",
+        "statue_0",
+        "pillar_0",
+        "window_1",
+        "statue_1",
+        "pillar_1",
+        "window_2",
+        "statue_2",
+        "pillar_2",
+        "window_3",
+        "statue_3",
+        "pillar_3",
+        "window_4",
+        "statue_4",
+        "pillar_4",
+        "window_5",
+        "statue_5",
+        "pillar_5"
+      ],
+      "net_budget": 111
+    }
+  ],
+  "two_player_resource_frontier": [
+    {
+      "p0_score": 18,
+      "p1_score": 304,
+      "p0_net_budget": 9,
+      "p1_net_budget": 111,
+      "total_score": 322
+    },
+    {
+      "p0_score": 23,
+      "p1_score": 286,
+      "p0_net_budget": 13,
+      "p1_net_budget": 107,
+      "total_score": 309
+    },
+    {
+      "p0_score": 29,
+      "p1_score": 281,
+      "p0_net_budget": 17,
+      "p1_net_budget": 103,
+      "total_score": 310
+    },
+    {
+      "p0_score": 46,
+      "p1_score": 263,
+      "p0_net_budget": 18,
+      "p1_net_budget": 102,
+      "total_score": 309
+    },
+    {
+      "p0_score": 51,
+      "p1_score": 261,
+      "p0_net_budget": 21,
+      "p1_net_budget": 99,
+      "total_score": 312
+    },
+    {
+      "p0_score": 58,
+      "p1_score": 256,
+      "p0_net_budget": 25,
+      "p1_net_budget": 95,
+      "total_score": 314
+    },
+    {
+      "p0_score": 60,
+      "p1_score": 238,
+      "p0_net_budget": 26,
+      "p1_net_budget": 94,
+      "total_score": 298
+    },
+    {
+      "p0_score": 62,
+      "p1_score": 236,
+      "p0_net_budget": 28,
+      "p1_net_budget": 92,
+      "total_score": 298
+    },
+    {
+      "p0_score": 63,
+      "p1_score": 235,
+      "p0_net_budget": 29,
+      "p1_net_budget": 91,
+      "total_score": 298
+    },
+    {
+      "p0_score": 65,
+      "p1_score": 232,
+      "p0_net_budget": 30,
+      "p1_net_budget": 90,
+      "total_score": 297
+    },
+    {
+      "p0_score": 70,
+      "p1_score": 230,
+      "p0_net_budget": 33,
+      "p1_net_budget": 87,
+      "total_score": 300
+    },
+    {
+      "p0_score": 85,
+      "p1_score": 214,
+      "p0_net_budget": 34,
+      "p1_net_budget": 86,
+      "total_score": 299
+    },
+    {
+      "p0_score": 88,
+      "p1_score": 213,
+      "p0_net_budget": 35,
+      "p1_net_budget": 85,
+      "total_score": 301
+    },
+    {
+      "p0_score": 89,
+      "p1_score": 210,
+      "p0_net_budget": 36,
+      "p1_net_budget": 84,
+      "total_score": 299
+    },
+    {
+      "p0_score": 90,
+      "p1_score": 208,
+      "p0_net_budget": 37,
+      "p1_net_budget": 83,
+      "total_score": 298
+    },
+    {
+      "p0_score": 91,
+      "p1_score": 206,
+      "p0_net_budget": 38,
+      "p1_net_budget": 82,
+      "total_score": 297
+    },
+    {
+      "p0_score": 98,
+      "p1_score": 203,
+      "p0_net_budget": 41,
+      "p1_net_budget": 79,
+      "total_score": 301
+    },
+    {
+      "p0_score": 100,
+      "p1_score": 188,
+      "p0_net_budget": 43,
+      "p1_net_budget": 77,
+      "total_score": 288
+    },
+    {
+      "p0_score": 104,
+      "p1_score": 184,
+      "p0_net_budget": 45,
+      "p1_net_budget": 75,
+      "total_score": 288
+    },
+    {
+      "p0_score": 112,
+      "p1_score": 181,
+      "p0_net_budget": 47,
+      "p1_net_budget": 73,
+      "total_score": 293
+    },
+    {
+      "p0_score": 115,
+      "p1_score": 175,
+      "p0_net_budget": 49,
+      "p1_net_budget": 71,
+      "total_score": 290
+    },
+    {
+      "p0_score": 123,
+      "p1_score": 171,
+      "p0_net_budget": 50,
+      "p1_net_budget": 70,
+      "total_score": 294
+    },
+    {
+      "p0_score": 126,
+      "p1_score": 169,
+      "p0_net_budget": 51,
+      "p1_net_budget": 69,
+      "total_score": 295
+    },
+    {
+      "p0_score": 127,
+      "p1_score": 164,
+      "p0_net_budget": 52,
+      "p1_net_budget": 68,
+      "total_score": 291
+    },
+    {
+      "p0_score": 128,
+      "p1_score": 163,
+      "p0_net_budget": 53,
+      "p1_net_budget": 67,
+      "total_score": 291
+    },
+    {
+      "p0_score": 133,
+      "p1_score": 160,
+      "p0_net_budget": 54,
+      "p1_net_budget": 66,
+      "total_score": 293
+    },
+    {
+      "p0_score": 135,
+      "p1_score": 154,
+      "p0_net_budget": 56,
+      "p1_net_budget": 64,
+      "total_score": 289
+    },
+    {
+      "p0_score": 139,
+      "p1_score": 150,
+      "p0_net_budget": 58,
+      "p1_net_budget": 62,
+      "total_score": 289
+    },
+    {
+      "p0_score": 147,
+      "p1_score": 147,
+      "p0_net_budget": 60,
+      "p1_net_budget": 60,
+      "total_score": 294
+    },
+    {
+      "p0_score": 150,
+      "p1_score": 139,
+      "p0_net_budget": 62,
+      "p1_net_budget": 58,
+      "total_score": 289
+    },
+    {
+      "p0_score": 154,
+      "p1_score": 135,
+      "p0_net_budget": 64,
+      "p1_net_budget": 56,
+      "total_score": 289
+    },
+    {
+      "p0_score": 160,
+      "p1_score": 133,
+      "p0_net_budget": 66,
+      "p1_net_budget": 54,
+      "total_score": 293
+    },
+    {
+      "p0_score": 163,
+      "p1_score": 128,
+      "p0_net_budget": 67,
+      "p1_net_budget": 53,
+      "total_score": 291
+    },
+    {
+      "p0_score": 164,
+      "p1_score": 127,
+      "p0_net_budget": 68,
+      "p1_net_budget": 52,
+      "total_score": 291
+    },
+    {
+      "p0_score": 169,
+      "p1_score": 126,
+      "p0_net_budget": 69,
+      "p1_net_budget": 51,
+      "total_score": 295
+    },
+    {
+      "p0_score": 171,
+      "p1_score": 123,
+      "p0_net_budget": 70,
+      "p1_net_budget": 50,
+      "total_score": 294
+    },
+    {
+      "p0_score": 175,
+      "p1_score": 115,
+      "p0_net_budget": 71,
+      "p1_net_budget": 49,
+      "total_score": 290
+    },
+    {
+      "p0_score": 181,
+      "p1_score": 112,
+      "p0_net_budget": 73,
+      "p1_net_budget": 47,
+      "total_score": 293
+    },
+    {
+      "p0_score": 184,
+      "p1_score": 104,
+      "p0_net_budget": 75,
+      "p1_net_budget": 45,
+      "total_score": 288
+    },
+    {
+      "p0_score": 188,
+      "p1_score": 100,
+      "p0_net_budget": 77,
+      "p1_net_budget": 43,
+      "total_score": 288
+    },
+    {
+      "p0_score": 203,
+      "p1_score": 98,
+      "p0_net_budget": 79,
+      "p1_net_budget": 41,
+      "total_score": 301
+    },
+    {
+      "p0_score": 206,
+      "p1_score": 91,
+      "p0_net_budget": 82,
+      "p1_net_budget": 38,
+      "total_score": 297
+    },
+    {
+      "p0_score": 208,
+      "p1_score": 90,
+      "p0_net_budget": 83,
+      "p1_net_budget": 37,
+      "total_score": 298
+    },
+    {
+      "p0_score": 210,
+      "p1_score": 89,
+      "p0_net_budget": 84,
+      "p1_net_budget": 36,
+      "total_score": 299
+    },
+    {
+      "p0_score": 213,
+      "p1_score": 88,
+      "p0_net_budget": 85,
+      "p1_net_budget": 35,
+      "total_score": 301
+    },
+    {
+      "p0_score": 214,
+      "p1_score": 85,
+      "p0_net_budget": 86,
+      "p1_net_budget": 34,
+      "total_score": 299
+    },
+    {
+      "p0_score": 230,
+      "p1_score": 70,
+      "p0_net_budget": 87,
+      "p1_net_budget": 33,
+      "total_score": 300
+    },
+    {
+      "p0_score": 232,
+      "p1_score": 65,
+      "p0_net_budget": 90,
+      "p1_net_budget": 30,
+      "total_score": 297
+    },
+    {
+      "p0_score": 235,
+      "p1_score": 63,
+      "p0_net_budget": 91,
+      "p1_net_budget": 29,
+      "total_score": 298
+    },
+    {
+      "p0_score": 236,
+      "p1_score": 62,
+      "p0_net_budget": 92,
+      "p1_net_budget": 28,
+      "total_score": 298
+    },
+    {
+      "p0_score": 238,
+      "p1_score": 60,
+      "p0_net_budget": 94,
+      "p1_net_budget": 26,
+      "total_score": 298
+    },
+    {
+      "p0_score": 256,
+      "p1_score": 58,
+      "p0_net_budget": 96,
+      "p1_net_budget": 24,
+      "total_score": 314
+    },
+    {
+      "p0_score": 261,
+      "p1_score": 51,
+      "p0_net_budget": 99,
+      "p1_net_budget": 21,
+      "total_score": 312
+    },
+    {
+      "p0_score": 263,
+      "p1_score": 46,
+      "p0_net_budget": 102,
+      "p1_net_budget": 18,
+      "total_score": 309
+    },
+    {
+      "p0_score": 281,
+      "p1_score": 29,
+      "p0_net_budget": 103,
+      "p1_net_budget": 17,
+      "total_score": 310
+    },
+    {
+      "p0_score": 286,
+      "p1_score": 23,
+      "p0_net_budget": 107,
+      "p1_net_budget": 13,
+      "total_score": 309
+    },
+    {
+      "p0_score": 304,
+      "p1_score": 18,
+      "p0_net_budget": 111,
+      "p1_net_budget": 9,
+      "total_score": 322
+    }
+  ]
+}

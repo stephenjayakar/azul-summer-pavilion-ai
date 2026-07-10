@@ -1,0 +1,142 @@
+{
+  "rules_engine": {
+    "tests_passed": 42,
+    "players_supported": [2, 3, 4],
+    "training_players": 2,
+    "tiles_per_color": 22,
+    "total_tiles": 132,
+    "normal_board_features_tested": 18
+  },
+  "hardware": {
+    "gpu": "NVIDIA GeForce RTX 3080",
+    "vram_mib": 10240,
+    "cuda": true,
+    "rollout_parallelism": 512,
+    "ppo_batch_size": 8192,
+    "measured_collection_sm_utilization_percent": "19-29",
+    "measured_ppo_peak_sm_utilization_percent": 47,
+    "note": "Policy inference and PPO use CUDA; Python simulator transitions limit collection utilization."
+  },
+  "training": {
+    "prior_competitive_self_play_games": 14176,
+    "score_objective_self_play_games": 98816,
+    "elite_cem_experiment_games": 4096,
+    "outer_teacher_games": 120,
+    "score_objective": "exact final score delta with gamma=1 and gae_lambda=1",
+    "best_score_checkpoint": "checkpoints/best_score.pt",
+    "previous_score_checkpoint": "checkpoints/best_score_v1.pt",
+    "best_competitive_checkpoint": "checkpoints/best_competitive.pt",
+    "default_alias": "checkpoints/best.pt"
+  },
+  "fixed_seed_self_play_500": {
+    "prior_competitive": {
+      "mean": 89.149,
+      "median": 90,
+      "p10": 76,
+      "p90": 103,
+      "max": 126,
+      "outer_stars_per_player": 0.0,
+      "center_stars_per_player": 0.684
+    },
+    "first_score_champion": {
+      "mean": 99.268,
+      "median": 103,
+      "p10": 81,
+      "p90": 113,
+      "max": 138,
+      "outer_stars_per_player": 0.437,
+      "center_stars_per_player": 0.002
+    },
+    "best_score": {
+      "mean": 101.077,
+      "median": 104,
+      "p10": 84,
+      "p90": 113,
+      "max": 139,
+      "outer_stars_per_player": 0.459,
+      "center_stars_per_player": 0.0
+    },
+    "improvement_over_competitive": {
+      "mean_points": 11.928,
+      "mean_percent": 13.38,
+      "median_points": 14,
+      "p10_points": 8,
+      "p90_points": 10
+    }
+  },
+  "evaluation": {
+    "best_score_raw_vs_random_300": {
+      "wins": 300,
+      "losses": 0,
+      "ties": 0,
+      "mean_score": 114.8833,
+      "mean_opponent_score": 17.9467,
+      "mean_margin": 96.9367
+    },
+    "best_score_raw_vs_strong_120": {
+      "wins": 42,
+      "losses": 77,
+      "ties": 1,
+      "match_score": 0.3542,
+      "mean_score": 85.775,
+      "mean_opponent_score": 93.875,
+      "mean_margin": -8.1
+    },
+    "best_competitive_hybrid_vs_strong_100": {
+      "wins": 57,
+      "losses": 39,
+      "ties": 4,
+      "match_score": 0.59,
+      "mean_score": 85.15,
+      "mean_margin": 2.93
+    }
+  },
+  "strategy_telemetry": {
+    "best_score_neural_self_play_100": {
+      "mean_score": 99.59,
+      "score_stddev": 12.008,
+      "board_tiles": 27.06,
+      "purple_star_rate": 0.44,
+      "center_star_rate": 0.0,
+      "all_1_rate": 1.0,
+      "all_2_rate": 1.0,
+      "all_3_rate": 0.95,
+      "all_4_rate": 0.3,
+      "windows_per_game": 0.44,
+      "statues_per_game": 4.56,
+      "pillars_per_game": 2.47,
+      "wild_tiles_spent": 11.23,
+      "tiles_carried": 13.19,
+      "first_player_tokens": 2.95
+    }
+  },
+  "theory": {
+    "exact_board_ceiling": 304,
+    "placement_points": 147,
+    "final_bonus_points": 152,
+    "gross_tile_cost": 147,
+    "architectural_reward_tiles": 36,
+    "relaxed_net_tile_cost": 111,
+    "single_board_frontier_points": 83,
+    "two_player_upper_frontier_points": 57,
+    "relaxed_balanced_pair": [147, 147],
+    "relaxed_extreme_pair": [304, 18],
+    "relaxed_max_combined": 322,
+    "caveat": "The pair frontier relaxes colors, rounds, supply timing, and draft alternation."
+  },
+  "empirical_legal_game_frontier": {
+    "games": 4000,
+    "mirrored_orientations": 8000,
+    "frontier_points": 7,
+    "max_individual": 142,
+    "max_combined_pair": [139, 111],
+    "max_combined": 250,
+    "highest_minimum_pair": [113, 113]
+  },
+  "failed_or_inferior_experiments": [
+    "elite-score CEM self-imitation",
+    "outer-progress auxiliary reward without demonstrations",
+    "discounted score PPO",
+    "score-model hybrid guardrails for head-to-head play"
+  ]
+}

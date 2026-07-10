@@ -1,0 +1,12 @@
+{
+  "method": "DAgger adversarial curriculum",
+  "base": "checkpoints/high_throughput/latest.pt",
+  "adversarial_games": 120,
+  "anchor_games": 40,
+  "examples": 17793,
+  "epochs": 20,
+  "teacher_mix": 0.35,
+  "seed": 12345,
+  "device": "cuda",
+  "elapsed_s": 58.1
+}
