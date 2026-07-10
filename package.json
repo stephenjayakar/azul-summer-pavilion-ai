@@ -1,0 +1,14 @@
+{
+  "name": "azul-summer-pavilion-ui",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": { "build": "vite build" },
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.0.2",
+    "vite": "^7.1.3"
+  }
+}
