@@ -79,16 +79,22 @@ function renderPlayer(player, target, opponentName) {
   });
   center.append(slots); target.append(center);
 
-  const features = document.createElement("div"); features.className = "feature-row";
-  if (player.claimed.length) {
-    for (const feature of player.claimed) {
-      const badge = document.createElement("span"); badge.className = "feature-badge";
-      badge.textContent = feature.kind; badge.title = `${feature.kind} ${feature.index + 1}`; features.append(badge);
-    }
-  } else {
-    features.innerHTML = `<span class="player-subtitle">No architectural rewards yet</span>`;
+  const architecture = document.createElement("div"); architecture.className = "architecture-progress";
+  const claimedTotal = player.architecture.filter(feature => feature.complete).length;
+  architecture.innerHTML = `<div class="architecture-progress-title"><span>Architectural rewards</span><span>${claimedTotal}/18 claimed</span></div>`;
+  const summary = document.createElement("div"); summary.className = "architecture-summary";
+  for (const kind of ["window", "statue", "pillar"]) {
+    const group = player.architecture.filter(feature => feature.kind === kind);
+    const claimed = group.filter(feature => feature.complete).length;
+    const closest = group.filter(feature => !feature.complete).sort((a, b) => b.progress - a.progress)[0];
+    const reward = group[0].reward;
+    const chip = document.createElement("div");
+    chip.className = `architecture-chip${claimed === 6 ? " complete" : ""}`;
+    chip.title = closest ? `${closest.name}: ${closest.requirement}` : `All ${kind}s completed`;
+    chip.innerHTML = `<strong>${kind}</strong><span class="reward-value">+${reward}</span><span class="claim-count">${claimed}/6</span><small>${closest ? `Next: ${closest.progress}/${closest.required}` : "All claimed"}</small>`;
+    summary.append(chip);
   }
-  target.append(features);
+  architecture.append(summary); target.append(architecture);
 }
 
 function renderFactories(factories) {
@@ -122,9 +128,11 @@ function renderActions(game) {
   $("action-count").textContent = `${actions.length} legal move${actions.length === 1 ? "" : "s"}`;
   const title = game.phase === "draft" ? "Choose a tile group" : "Build your pavilion";
   $("action-title").textContent = game.pending_bonus ? "Choose your reward" : title;
-  $("action-help").textContent = game.phase === "draft"
-    ? "Choose one color from a factory or the center. A non-wild choice also takes one wild tile when present."
-    : "Place tiles, then pass when you are ready. Cost is the number printed on that petal.";
+  $("action-help").textContent = game.pending_bonus
+    ? `Architectural reward active: take ${game.pending_bonus} more bonus tile${game.pending_bonus === 1 ? "" : "s"} from the supply.`
+    : game.phase === "draft"
+      ? "Choose one color from a factory or the center. A non-wild choice also takes one wild tile when present."
+      : "Place tiles, then pass when you are ready. Cost is the number printed on that petal.";
 
   if (!actions.length) {
     const empty = document.createElement("div"); empty.className = "empty-actions";
@@ -144,6 +152,18 @@ function renderActions(game) {
     button.append(copy); button.title = action.description;
     button.addEventListener("click", () => playAction(action.id));
     root.append(button);
+  }
+}
+
+function renderRewardEvents(events) {
+  const root = $("reward-event"); root.replaceChildren();
+  if (!events || !events.length) { root.hidden = true; return; }
+  root.hidden = false;
+  for (const event of events) {
+    const card = document.createElement("div"); card.className = "reward-event-card";
+    const owner = event.player === 0 ? "You completed" : "AI completed";
+    card.innerHTML = `<span class="reward-event-icon">✦</span><span class="reward-event-copy"><strong>${owner} ${event.name}</strong><span>${event.requirement}</span></span><span class="reward-event-value">+${event.reward} supply tile${event.reward === 1 ? "" : "s"}</span>`;
+    root.append(card);
   }
 }
 
@@ -167,11 +187,15 @@ function render(game) {
   if (game.last_ai_actions.length) {
     log.hidden = false; $("ai-log-text").textContent = game.last_ai_actions.join(" · ");
   } else log.hidden = true;
+  renderRewardEvents(game.reward_events);
 
   if (game.done) {
     const result = game.winner === "human" ? "You win the pavilion!" : game.winner === "ai" ? `${game.opponent_name} wins.` : "The game ends in a tie.";
     $("status-line").textContent = result;
     $("status-detail").textContent = `Final score: ${game.players[0].score}–${game.players[1].score}`;
+  } else if (game.pending_bonus && game.current_player === 0) {
+    $("status-line").textContent = "Architectural reward — choose from the supply";
+    $("status-detail").textContent = `Take ${game.pending_bonus} more bonus tile${game.pending_bonus === 1 ? "" : "s"}. You may use them later this placement phase.`;
   } else {
     $("status-line").textContent = game.current_player === 0 ? "Your move" : "AI is thinking";
     $("status-detail").textContent = `You are playing ${game.opponent_name}. ${game.phase === "draft" ? "Draft from the workshops." : "Place tiles on your pavilion."}`;

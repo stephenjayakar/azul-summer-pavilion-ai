@@ -87,6 +87,64 @@ OPPONENTS: dict[str, tuple[str, str, Callable[[], object], str | None]] = {
 }
 
 
+FEATURES = tuple(AzulGame._features())
+FEATURE_LOOKUP = {
+    (kind, index): {"kind": kind, "index": index, "cells": cells, "reward": reward}
+    for kind, index, cells, reward in FEATURES
+}
+
+
+def _feature_name(kind: str, cells) -> str:
+    outer_colors = []
+    for star, _ in cells:
+        if star < 6 and COLORS[star] not in outer_colors:
+            outer_colors.append(COLORS[star])
+    if kind == "window":
+        return f"{outer_colors[0].title()} window"
+    if kind == "statue":
+        return f"{outer_colors[0].title()}–{outer_colors[1].title()} statue"
+    return f"{outer_colors[0].title()} pillar"
+
+
+def _feature_requirement(kind: str, cells) -> str:
+    outer = [(COLORS[star], slot + 1) for star, slot in cells if star < 6]
+    center = [slot + 1 for star, slot in cells if star == 6]
+    if kind == "window":
+        return f"Fill costs 5 and 6 on the {outer[0][0]} star"
+    if kind == "statue":
+        first = outer[:2]; second = outer[2:]
+        return (
+            f"Fill {first[0][0]} costs {first[0][1]}–{first[1][1]} and "
+            f"{second[0][0]} costs {second[0][1]}–{second[1][1]}"
+        )
+    return (
+        f"Fill {outer[0][0]} costs {outer[0][1]}–{outer[1][1]} and "
+        f"center costs {center[0]}–{center[1]}"
+    )
+
+
+def _occupied(player, star: int, slot: int) -> bool:
+    return player.outer[star][slot] if star < 6 else player.center[slot] >= 0
+
+
+def _architecture_payload(player) -> list[dict]:
+    result = []
+    for kind, index, cells, reward in FEATURES:
+        complete = (kind, index) in player.claimed
+        progress = sum(_occupied(player, star, slot) for star, slot in cells)
+        result.append({
+            "kind": kind,
+            "index": index,
+            "name": _feature_name(kind, cells),
+            "requirement": _feature_requirement(kind, cells),
+            "progress": progress,
+            "required": len(cells),
+            "complete": complete,
+            "reward": reward,
+        })
+    return result
+
+
 def available_opponents() -> list[dict]:
     result = []
     for key, (name, description, _, checkpoint) in OPPONENTS.items():
@@ -116,6 +174,7 @@ def _player_payload(player, index: int) -> dict:
             {"kind": kind, "index": index}
             for kind, index in sorted(player.claimed)
         ],
+        "architecture": _architecture_payload(player),
         "passed": player.passed,
         "tiles_on_board": player.board_tile_count(),
     }
@@ -142,6 +201,7 @@ class GameSession:
         self.agent = None
         self.opponent_id = "competitive_hybrid"
         self.last_ai_actions: list[str] = []
+        self.reward_events: list[dict] = []
 
     def new_game(self, opponent_id: str, seed: int | None = None) -> dict:
         if opponent_id not in OPPONENTS:
@@ -154,6 +214,7 @@ class GameSession:
             self.opponent_id = opponent_id
             self.game = AzulGame(seed=seed)
             self.last_ai_actions = []
+            self.reward_events = []
             self._play_ai_turns()
             return self.payload()
 
@@ -167,9 +228,26 @@ class GameSession:
                 raise ValueError("It is the AI's turn")
             if action_id not in self.game.legal_actions():
                 raise ValueError("That action is no longer legal")
+            if not self.game.pending_bonus:
+                self.reward_events = []
+            before_claimed = [set(player.claimed) for player in self.game.players]
             self.game.step(action_id)
+            self._record_reward_events(before_claimed)
             self._play_ai_turns()
             return self.payload()
+
+    def _record_reward_events(self, before_claimed: list[set]) -> None:
+        for player_index, player in enumerate(self.game.players):
+            for key in sorted(player.claimed - before_claimed[player_index]):
+                feature = FEATURE_LOOKUP[key]
+                self.reward_events.append({
+                    "player": player_index,
+                    "kind": feature["kind"],
+                    "index": feature["index"],
+                    "name": _feature_name(feature["kind"], feature["cells"]),
+                    "requirement": _feature_requirement(feature["kind"], feature["cells"]),
+                    "reward": feature["reward"],
+                })
 
     def _play_ai_turns(self) -> None:
         self.last_ai_actions = []
@@ -177,7 +255,9 @@ class GameSession:
         while self.game is not None and not self.game.done and self.game.current_player == 1:
             action = self.agent.choose(self.game)
             self.last_ai_actions.append(self.game.action_description(action))
+            before_claimed = [set(player.claimed) for player in self.game.players]
             self.game.step(action)
+            self._record_reward_events(before_claimed)
             guard += 1
             if guard > 100:
                 raise RuntimeError("AI turn loop exceeded safety limit")
@@ -217,6 +297,7 @@ class GameSession:
             "supply": dict(zip(COLORS, game.supply)),
             "pending_bonus": game.pending_bonus,
             "last_ai_actions": self.last_ai_actions,
+            "reward_events": self.reward_events,
             "legal_actions": [_action_payload(game, action) for action in legal],
         }
 
