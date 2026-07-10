@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102b35">
+  <title>Summer Pavilion — Play the AI</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">✦</span>
+      <div>
+        <p class="eyebrow">AZUL · SUMMER PAVILION</p>
+        <h1>Play the AI</h1>
+      </div>
+    </div>
+    <div class="game-controls">
+      <label for="opponent-select">Opponent</label>
+      <select id="opponent-select" aria-label="Choose AI opponent"></select>
+      <button id="new-game" class="primary">New game</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="status-strip" aria-live="polite">
+      <div class="round-medallion"><span id="round-number">1</span><small>ROUND</small></div>
+      <div class="status-copy">
+        <p id="status-line">Preparing the pavilion…</p>
+        <p id="status-detail">Choose an opponent and start a game.</p>
+      </div>
+      <div id="wild-badge" class="wild-badge"><span class="tile-dot purple"></span><span>Wild: purple</span></div>
+    </section>
+
+    <section class="table-layout">
+      <aside id="ai-board" class="player-panel ai-panel" aria-label="AI player board"></aside>
+
+      <section class="shared-board" aria-label="Shared drafting area">
+        <div class="section-heading">
+          <div><p class="eyebrow">WORKSHOPS</p><h2>Factory displays</h2></div>
+          <span id="phase-pill" class="phase-pill">Draft phase</span>
+        </div>
+        <div id="factories" class="factories"></div>
+
+        <div class="market-grid">
+          <div class="market-card center-market">
+            <div class="market-title"><span>Center</span><small id="token-state">First-player token available</small></div>
+            <div id="center-pool" class="tile-row large"></div>
+          </div>
+          <div class="market-card supply-market">
+            <div class="market-title"><span>Supply</span><small>Architectural rewards</small></div>
+            <div id="supply" class="tile-row"></div>
+          </div>
+        </div>
+
+        <div class="ai-log" id="ai-log" hidden>
+          <span class="ai-log-icon">AI</span>
+          <div><strong>Last move</strong><p id="ai-log-text"></p></div>
+        </div>
+      </section>
+
+      <aside id="human-board" class="player-panel human-panel" aria-label="Your player board"></aside>
+    </section>
+
+    <section class="action-dock" aria-label="Legal moves">
+      <div class="action-header">
+        <div><p class="eyebrow">YOUR TURN</p><h2 id="action-title">Choose a tile group</h2></div>
+        <div id="action-count" class="action-count">0 legal moves</div>
+      </div>
+      <div id="action-help" class="action-help"></div>
+      <div id="actions" class="actions"></div>
+    </section>
+  </main>
+
+  <div id="thinking" class="thinking" hidden>
+    <div class="thinking-card"><span class="spinner" aria-hidden="true"></span><strong>AI is planning…</strong><small>Search opponents can take a few seconds late in the game.</small></div>
+  </div>
+
+  <div id="toast" class="toast" role="alert" hidden></div>
+  <script src="/app.js" defer></script>
+</body>
+</html>

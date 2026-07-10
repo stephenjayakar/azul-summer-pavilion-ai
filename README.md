@@ -20,6 +20,16 @@ python -m azul.cli play --checkpoint checkpoints/best_competitive.pt
 python -m azul.cli play --difficulty heuristic
 ```
 
+## Play in the web interface
+
+From the project folder, start the local game server:
+
+```powershell
+python -m azul.web
+```
+
+Then open <http://127.0.0.1:8000> in a browser. The opponent menu includes the competitive hybrid, raw score and competitive neural policies, score hybrid, final-round rollout search, the experimental multi-star policy, the strategic heuristic, and random play. The interface runs entirely on this computer and uses the same rules engine and checkpoint files as the command-line game.
+
 `checkpoints/best.pt` and `checkpoints/latest.pt` currently alias the high-score policy. The separate `best_competitive.pt` is preserved because its tactical hybrid remains the stronger match-play opponent.
 
 The CLI abbreviates colors in inventories (`p`, `g`, `o`, `y`, `b`, `r`) and lists every legal move. When placing a tile, “using N natural” is meaningful because you may choose how many current-round wild tiles to spend. One natural tile is always required unless placing the wild color on its own matching star.
@@ -105,6 +115,7 @@ The high-score policy averages 98.26 in this independent 100-game profile. It co
 - `src/azul/theory.py` — exact board optimizer and relaxed resource Pareto frontier.
 - `src/azul/empirical_frontier.py` — observed legal-game score-pair frontier.
 - `src/azul/cli.py` — interactive play, opponent evaluation, and fixed-seed score gate.
+- `src/azul/web.py` / `src/azul/web_static/` — local 1v1 browser interface and JSON game API.
 - `training_report.json` — hardware, run sizes, score distributions, and evaluation evidence.
 - `theoretical_frontier.json` / `empirical_frontier.json` — full upper/lower frontier data.
 - `STRATEGY.md` — learned strategy, stronger/weaker patterns, and caveats.
