@@ -17,8 +17,11 @@
       </div>
     </div>
     <div class="game-controls">
-      <label for="opponent-select">Opponent</label>
-      <select id="opponent-select" aria-label="Choose AI opponent"></select>
+      <div class="opponent-field">
+        <label for="opponent-select">Opponent <span id="best-label" class="best-label">★ BEST 1v1</span></label>
+        <select id="opponent-select" aria-label="Choose AI opponent"></select>
+        <small id="opponent-detail">Best verified head-to-head opponent.</small>
+      </div>
       <button id="new-game" class="primary">New game</button>
     </div>
   </header>

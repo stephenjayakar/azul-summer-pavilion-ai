@@ -47,12 +47,12 @@ def _rollout(relative: str):
 
 OPPONENTS: dict[str, tuple[str, str, Callable[[], object], str | None]] = {
     "competitive_hybrid": (
-        "Competitive hybrid", "Strongest measured match-play opponent",
+        "Competitive hybrid", "Best verified 1v1: 59% match score against the strong benchmark",
         lambda: _hybrid("checkpoints/best_competitive.pt"),
         "checkpoints/best_competitive.pt",
     ),
     "score_neural": (
-        "Score champion", "Raw neural policy with the highest self-play score",
+        "Score champion", "Highest-scoring raw policy: 101.077 mean on the fixed self-play gate",
         lambda: _neural("checkpoints/best_score.pt"),
         "checkpoints/best_score.pt",
     ),
@@ -154,6 +154,8 @@ def available_opponents() -> list[dict]:
             "name": name,
             "description": description,
             "available": available,
+            "recommended": key == "competitive_hybrid",
+            "score_champion": key == "score_neural",
         })
     return result
 

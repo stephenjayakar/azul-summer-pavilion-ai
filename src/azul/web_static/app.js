@@ -1,5 +1,5 @@
 const COLORS = ["purple", "green", "orange", "yellow", "blue", "red"];
-const state = { game: null, busy: false };
+const state = { game: null, busy: false, opponents: [] };
 
 const $ = (id) => document.getElementById(id);
 
@@ -38,6 +38,15 @@ function fillTileRow(element, counts, showZero = false) {
   }
 }
 
+function boardFeatureMarker(feature, short, positionClass) {
+  const marker = document.createElement("span");
+  const almost = !feature.complete && feature.progress === feature.required - 1;
+  marker.className = `board-feature-marker ${positionClass}${feature.complete ? " claimed" : almost ? " near" : ""}`;
+  marker.title = `${feature.name}: ${feature.requirement}. Reward: ${feature.reward} supply tile${feature.reward === 1 ? "" : "s"}. Progress ${feature.progress}/${feature.required}.`;
+  marker.innerHTML = `<span>${short}</span><b>+${feature.reward}</b><small>${feature.complete ? "✓" : `${feature.progress}/${feature.required}`}</small>`;
+  return marker;
+}
+
 function renderPlayer(player, target, opponentName) {
   target.replaceChildren();
   const head = document.createElement("div");
@@ -62,9 +71,23 @@ function renderPlayer(player, target, opponentName) {
     const petals = document.createElement("div"); petals.className = "star-petals";
     star.slots.forEach((occupied, index) => {
       const petal = document.createElement("span");
-      petal.className = `petal${occupied ? ` filled ${star.color}` : ""}`;
-      petal.textContent = index + 1; petals.append(petal);
+      petal.className = `petal slot-${index + 1}${occupied ? " occupied" : ""}`;
+      const cost = document.createElement("span"); cost.className = "cost-number"; cost.textContent = index + 1;
+      petal.append(cost);
+      if (occupied) {
+        const placed = document.createElement("span"); placed.className = `placed-tile ${star.color}`;
+        placed.textContent = star.color[0].toUpperCase(); placed.title = `${star.color} tile on cost ${index + 1}`;
+        petal.append(placed);
+      }
+      petals.append(petal);
     });
+    const anchored = player.architecture.filter(feature => feature.name.toLowerCase().startsWith(star.color));
+    const statue = anchored.find(feature => feature.kind === "statue");
+    const pillar = anchored.find(feature => feature.kind === "pillar");
+    const windowFeature = anchored.find(feature => feature.kind === "window");
+    if (statue) petals.append(boardFeatureMarker(statue, "S", "statue-marker"));
+    if (pillar) petals.append(boardFeatureMarker(pillar, "P", "pillar-marker"));
+    if (windowFeature) petals.append(boardFeatureMarker(windowFeature, "W", "window-marker"));
     card.append(petals); stars.append(card);
   }
   target.append(stars);
@@ -74,27 +97,23 @@ function renderPlayer(player, target, opponentName) {
   const slots = document.createElement("div"); slots.className = "center-slots";
   player.center.forEach((color, index) => {
     const slot = document.createElement("span");
-    slot.className = `center-slot${color ? ` filled ${color}` : ""}`;
-    slot.textContent = index + 1; slot.title = color || `Cost ${index + 1}`; slots.append(slot);
+    slot.className = `center-slot${color ? " filled" : ""}`;
+    const cost = document.createElement("span"); cost.className = "cost-number"; cost.textContent = index + 1;
+    slot.append(cost);
+    if (color) {
+      const placed = document.createElement("span"); placed.className = `placed-tile ${color}`;
+      placed.textContent = color[0].toUpperCase(); slot.append(placed);
+    }
+    slot.title = color ? `${color} tile on center cost ${index + 1}` : `Center cost ${index + 1}`; slots.append(slot);
   });
   center.append(slots); target.append(center);
 
   const architecture = document.createElement("div"); architecture.className = "architecture-progress";
   const claimedTotal = player.architecture.filter(feature => feature.complete).length;
   architecture.innerHTML = `<div class="architecture-progress-title"><span>Architectural rewards</span><span>${claimedTotal}/18 claimed</span></div>`;
-  const summary = document.createElement("div"); summary.className = "architecture-summary";
-  for (const kind of ["window", "statue", "pillar"]) {
-    const group = player.architecture.filter(feature => feature.kind === kind);
-    const claimed = group.filter(feature => feature.complete).length;
-    const closest = group.filter(feature => !feature.complete).sort((a, b) => b.progress - a.progress)[0];
-    const reward = group[0].reward;
-    const chip = document.createElement("div");
-    chip.className = `architecture-chip${claimed === 6 ? " complete" : ""}`;
-    chip.title = closest ? `${closest.name}: ${closest.requirement}` : `All ${kind}s completed`;
-    chip.innerHTML = `<strong>${kind}</strong><span class="reward-value">+${reward}</span><span class="claim-count">${claimed}/6</span><small>${closest ? `Next: ${closest.progress}/${closest.required}` : "All claimed"}</small>`;
-    summary.append(chip);
-  }
-  architecture.append(summary); target.append(architecture);
+  const note = document.createElement("p"); note.className = "architecture-inline-note";
+  note.textContent = "Reward markers now sit between their numbered spaces: S between 1/2, P between 2/3, and W between 5/6. Gold means claimed.";
+  architecture.append(note); target.append(architecture);
 }
 
 function renderFactories(factories) {
@@ -167,8 +186,16 @@ function renderRewardEvents(events) {
   }
 }
 
+function updateOpponentDetail() {
+  const selected = state.opponents.find(opponent => opponent.id === $("opponent-select").value);
+  if (!selected) return;
+  $("opponent-detail").textContent = selected.description;
+  $("best-label").hidden = !selected.recommended;
+}
+
 function render(game) {
   state.game = game;
+  state.opponents = game.opponents || state.opponents;
   if (!game.started) return;
   $("round-number").textContent = game.round;
   $("phase-pill").textContent = `${game.phase[0].toUpperCase()}${game.phase.slice(1)} phase`;
@@ -246,14 +273,20 @@ async function playAction(action) {
 async function init() {
   try {
     const game = await request("/api/state");
+    state.opponents = game.opponents;
     const select = $("opponent-select");
     for (const opponent of game.opponents) {
       const option = document.createElement("option");
-      option.value = opponent.id; option.textContent = opponent.name;
+      option.value = opponent.id;
+      option.textContent = opponent.recommended
+        ? `${opponent.name} — ★ BEST 1v1`
+        : opponent.score_champion ? `${opponent.name} — highest score` : opponent.name;
       option.disabled = !opponent.available; option.title = opponent.description;
       select.append(option);
     }
     select.value = game.opponent_id || "competitive_hybrid";
+    select.addEventListener("change", updateOpponentDetail);
+    updateOpponentDetail();
     $("new-game").addEventListener("click", newGame);
     if (game.started) render(game); else await newGame();
   } catch (error) { showError(error); }
