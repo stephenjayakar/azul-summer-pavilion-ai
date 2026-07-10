@@ -1,0 +1,73 @@
+{
+  "method": "rollout search distillation",
+  "base": "checkpoints/best_score.pt",
+  "games": 64,
+  "examples": 12618,
+  "epochs": 10,
+  "top_k": 3,
+  "search_from_round": 1,
+  "objective": "team",
+  "learning_rate": 5e-05,
+  "changed_weight": 30.0,
+  "changed_actions": 282,
+  "changed_action_rate": 0.02234902520209225,
+  "seed": 42001,
+  "device": "cuda",
+  "teacher_mean_score": 115.0234375,
+  "teacher_mean_combined": 230.046875,
+  "teacher_max_score": 143,
+  "teacher_max_combined": 251,
+  "elapsed_s": 312.3,
+  "history": [
+    {
+      "epoch": 1,
+      "loss": 1.6566495299339294,
+      "accuracy": 0.9732921223648756
+    },
+    {
+      "epoch": 2,
+      "loss": 1.5370804071426392,
+      "accuracy": 0.9558567126327469
+    },
+    {
+      "epoch": 3,
+      "loss": 1.5172168016433716,
+      "accuracy": 0.9406403550483436
+    },
+    {
+      "epoch": 4,
+      "loss": 1.5165844559669495,
+      "accuracy": 0.9283563163734347
+    },
+    {
+      "epoch": 5,
+      "loss": 1.4417654871940613,
+      "accuracy": 0.9188460928831828
+    },
+    {
+      "epoch": 6,
+      "loss": 1.4251339435577393,
+      "accuracy": 0.9110001585037248
+    },
+    {
+      "epoch": 7,
+      "loss": 1.3813404440879822,
+      "accuracy": 0.9073545728324616
+    },
+    {
+      "epoch": 8,
+      "loss": 1.3208298683166504,
+      "accuracy": 0.9039467427484545
+    },
+    {
+      "epoch": 9,
+      "loss": 1.2921881079673767,
+      "accuracy": 0.9014899350134729
+    },
+    {
+      "epoch": 10,
+      "loss": 1.2797688841819763,
+      "accuracy": 0.8982406086543033
+    }
+  ]
+}

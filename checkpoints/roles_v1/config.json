@@ -1,0 +1,13 @@
+{
+  "method": "dual-role cooperative PPO",
+  "base": "checkpoints/best_score.pt",
+  "iterations": 20,
+  "games": 512,
+  "builder_weight": 3.0,
+  "learning_rate": 7e-05,
+  "entropy_coef": 0.01,
+  "ppo_epochs": 6,
+  "batch_size": 8192,
+  "seed": 51001,
+  "device": "cuda"
+}

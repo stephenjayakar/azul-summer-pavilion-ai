@@ -4,7 +4,7 @@ import argparse
 import json
 
 from .agents import (
-    HybridAgent, HeuristicAgent, NeuralAgent, RandomAgent, RolloutAgent, evaluate,
+    HybridAgent, HeuristicAgent, NeuralAgent, RandomAgent, RoleAgent, RolloutAgent, evaluate,
     evaluate_neural_batched, evaluate_self_play_batched,
 )
 from .game import AzulGame, COLORS
@@ -79,9 +79,16 @@ def main():
     s.add_argument("checkpoint")
     s.add_argument("--games", type=int, default=500)
     s.add_argument("--stochastic", action="store_true")
+    s.add_argument("--device", choices=("cpu", "cuda"), default="cpu")
+    s.add_argument("--temperature", type=float, default=1.0)
     s.add_argument("--search-from-round", type=int, choices=range(0, 6))
     s.add_argument("--top-k", type=int, default=6)
-    s.add_argument("--search-objective", choices=("own", "team"), default="own")
+    s.add_argument("--search-objective", choices=("own", "team", "frontier", "builder"), default="own")
+    s.add_argument("--individual-weight", type=float, default=1.0)
+    s.add_argument("--nested-search-from-round", type=int, choices=range(0, 6))
+    s.add_argument("--nested-top-k", type=int, default=3)
+    rs = sub.add_parser("role-score", help="fixed-seed builder/support checkpoint benchmark")
+    rs.add_argument("checkpoint"); rs.add_argument("--games", type=int, default=500)
     args = parser.parse_args()
     if args.cmd == "play":
         play(args.checkpoint, args.difficulty, args.mode)
@@ -94,17 +101,34 @@ def main():
             agent = NeuralAgent(args.checkpoint)
             result = evaluate_neural_batched(agent, opponent, args.games)
         print(json.dumps(result, indent=2))
-    else:
+    elif args.cmd == "score":
         if args.search_from_round is not None:
             if args.stochastic:
                 parser.error("--stochastic and --search-from-round cannot be combined")
+            device = "cuda" if __import__("torch").cuda.is_available() else "cpu"
+            nested = None
+            if args.nested_search_from_round is not None:
+                nested = RolloutAgent(
+                    args.checkpoint, device=device, top_k=args.nested_top_k,
+                    search_from_round=args.nested_search_from_round,
+                    objective=args.search_objective,
+                    individual_weight=args.individual_weight,
+                )
             agent = RolloutAgent(
-                args.checkpoint, device="cuda" if __import__("torch").cuda.is_available() else "cpu",
+                args.checkpoint, device=device,
                 top_k=args.top_k, search_from_round=args.search_from_round,
                 objective=args.search_objective,
+                individual_weight=args.individual_weight,
+                rollout_agent=nested,
             )
         else:
-            agent = NeuralAgent(args.checkpoint, stochastic=args.stochastic)
+            agent = NeuralAgent(
+                args.checkpoint, device=args.device, stochastic=args.stochastic,
+                temperature=args.temperature,
+            )
+        print(json.dumps(evaluate_self_play_batched(agent, args.games), indent=2))
+    else:
+        agent = RoleAgent(args.checkpoint, device="cuda" if __import__("torch").cuda.is_available() else "cpu")
         print(json.dumps(evaluate_self_play_batched(agent, args.games), indent=2))
 
 

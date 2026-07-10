@@ -54,10 +54,14 @@ class RandomAgent:
 
 
 class NeuralAgent:
-    def __init__(self, checkpoint: str | Path, device: str = "cpu", stochastic: bool = False):
+    def __init__(
+        self, checkpoint: str | Path, device: str = "cpu", stochastic: bool = False,
+        temperature: float = 1.0,
+    ):
         self.device = torch.device(device)
         self.net = load_network(checkpoint, self.device)
         self.stochastic = stochastic
+        self.temperature = temperature
 
     @torch.inference_mode()
     def choose(self, game: AzulGame) -> int:
@@ -66,7 +70,7 @@ class NeuralAgent:
         logits, _ = self.net(obs)
         logits = logits.masked_fill(~mask, -1e9)
         if self.stochastic:
-            return int(torch.distributions.Categorical(logits=logits).sample().item())
+            return int(torch.distributions.Categorical(logits=logits / self.temperature).sample().item())
         return int(logits.argmax(dim=-1).item())
 
     @torch.inference_mode()
@@ -78,7 +82,7 @@ class NeuralAgent:
         logits, _ = self.net(obs)
         logits.masked_fill_(~masks, -1e9)
         if self.stochastic:
-            actions = torch.distributions.Categorical(logits=logits).sample()
+            actions = torch.distributions.Categorical(logits=logits / self.temperature).sample()
         else:
             actions = logits.argmax(dim=-1)
         return [int(x) for x in actions.cpu()]
@@ -282,6 +286,99 @@ class MultiStarHeuristicAgent(HeuristicAgent):
         return super()._score(game, action_id)
 
 
+class FrontierTargetAgent(HeuristicAgent):
+    """Centralized builder/support heuristic for the relaxed 203-98 target."""
+
+    TARGET_MASKS = (
+        (63, 63, 63, 15, 15, 15, 15),  # 79-net-tile / 203-point builder target
+        (63, 63, 1, 3, 3, 1, 1),      # 41-net-tile / 98-point support target
+    )
+
+    @staticmethod
+    def _mask(player, star: int) -> int:
+        occupied = player.outer[star] if star < 6 else [color >= 0 for color in player.center]
+        return sum((1 << slot) for slot, value in enumerate(occupied) if value)
+
+    def _remaining_demand(self, game: AzulGame, role: int) -> list[float]:
+        player = game.players[role]; masks = self.TARGET_MASKS[role]
+        demand = [0.0] * 6
+        for star in range(6):
+            missing = masks[star] & ~self._mask(player, star)
+            demand[star] += missing.bit_count() * 2
+            demand[star] += sum((slot + 1) * .25 for slot in range(6) if missing & (1 << slot))
+            if masks[star] == 63:
+                progress = sum(player.outer[star]) / 6
+                demand[star] += 18 * progress ** 3
+        # Center target needs one natural tile of distinct colors; favor colors
+        # not already represented there.
+        center_missing = masks[6] & ~self._mask(player, 6)
+        used = {color for color in player.center if color >= 0}
+        for color in range(6):
+            if color not in used:
+                demand[color] += center_missing.bit_count() / 6
+        return demand
+
+    def _score(self, game: AzulGame, action_id: int) -> float:
+        action = decode_action(action_id); role = game.current_player
+        player = game.players[role]; target_masks = self.TARGET_MASKS[role]
+        demand = self._remaining_demand(game, role)
+        if action.kind == "bonus":
+            next_wild = (game.round + 1) % 6
+            return 100 + demand[action.color] * 8 + (25 if action.color == next_wild else 0)
+        if action.kind == "keep":
+            next_wild = (game.round + 1) % 6
+            return 70 + demand[action.color] * 6 + (35 if action.color == next_wild else 0)
+        if action.kind == "keep_finish":
+            return -sum(player.inventory) * 5
+        if action.kind == "pass":
+            return -2000 - sum(player.inventory) * 4
+        if action.kind == "draft":
+            source = game.center_pool if action.source == CENTER_SOURCE else game.factories[action.source]
+            taken = [0] * 6
+            if action.color == game.wild:
+                taken[game.wild] = 1
+            else:
+                taken[action.color] = source[action.color]
+                taken[game.wild] = int(source[game.wild] > 0)
+            count = sum(taken); useful = sum(taken[color] * demand[color] for color in range(6))
+            wild_value = taken[game.wild] * 12
+            # Builder takes large groups; support deliberately takes small useful
+            # groups so the observed 120 factory tiles approach a 79/41 split.
+            size_value = count * (26 if role == 0 else -15)
+            score = size_value + useful * (2.5 if role == 0 else 4.0) + wild_value
+            if action.source == CENTER_SOURCE and game.next_start_player is None:
+                score -= count * 3
+            return score
+        if action.kind.startswith("place"):
+            star = 6 if action.kind == "place_center" else action.star
+            targeted = bool(target_masks[star] & (1 << action.slot))
+            before_score = player.score; before_claimed = len(player.claimed)
+            clone = game.clone(); clone.step(action_id); after = clone.players[role]
+            gain = after.score - before_score
+            new_claims = after.claimed - player.claimed
+            feature_tiles = sum({"window": 3, "statue": 2, "pillar": 1}[kind] for kind, _ in new_claims)
+            score = 100 + gain * 18 + feature_tiles * 65 - (action.slot + 1 - action.natural)
+            score += 90 if targeted else -80
+            if star < 6 and target_masks[star] == 63:
+                before_progress = sum(player.outer[star]) / 6
+                after_progress = sum(after.outer[star]) / 6
+                score += 420 * (after_progress ** 4 - before_progress ** 4)
+                if action.slot >= 4:
+                    score += 140
+            if star < 6 and all(after.outer[star]):
+                score += 260
+            if star == 6 and all(color >= 0 for color in after.center):
+                score += 180
+            if action.slot < 4:
+                before_covered = sum(player.outer[s][action.slot] for s in range(6)) + (player.center[action.slot] >= 0)
+                after_covered = sum(after.outer[s][action.slot] for s in range(6)) + (after.center[action.slot] >= 0)
+                if after_covered == 7:
+                    score += 220
+                score += before_covered * 5
+            return score
+        return 0
+
+
 class HybridAgent:
     """Strong play mode: tactical guardrails with neural tie-breaking.
 
@@ -317,14 +414,17 @@ class RolloutAgent:
 
     def __init__(
         self, checkpoint: str | Path, device: str = "cpu", top_k: int = 6,
-        search_from_round: int = 5, objective: str = "own",
+        search_from_round: int = 5, objective: str = "own", individual_weight: float = 1.0,
+        rollout_agent=None,
     ):
-        if objective not in {"own", "team"}:
+        if objective not in {"own", "team", "frontier", "builder"}:
             raise ValueError(f"unknown rollout objective: {objective}")
         self.neural = NeuralAgent(checkpoint, device=device)
         self.top_k = top_k
         self.search_from_round = search_from_round
         self.objective = objective
+        self.individual_weight = individual_weight
+        self.rollout_agent = rollout_agent
 
     def choose(self, game: AzulGame) -> int:
         return self.choose_many([game])[0]
@@ -355,22 +455,61 @@ class RolloutAgent:
 
         while any(not candidate.done for candidate in candidates):
             active_ids = [i for i, candidate in enumerate(candidates) if not candidate.done]
-            actions = self.neural.choose_many([candidates[i] for i in active_ids])
+            rollout_policy = self.rollout_agent or self.neural
+            actions = rollout_policy.choose_many([candidates[i] for i in active_ids])
             for candidate_i, action in zip(active_ids, actions):
                 candidates[candidate_i].step(action)
 
         best: dict[int, tuple[int, float, int]] = {}
         for candidate, (local_i, actor, action, logit) in zip(candidates, metadata):
-            utility = (
-                sum(player.score for player in candidate.players)
-                if self.objective == "team" else candidate.players[actor].score
-            )
+            if self.objective == "team":
+                utility = sum(player.score for player in candidate.players)
+            elif self.objective == "frontier":
+                final_scores = [player.score for player in candidate.players]
+                utility = sum(final_scores) + self.individual_weight * max(final_scores)
+            elif self.objective == "builder":
+                final_scores = [player.score for player in candidate.players]
+                utility = sum(final_scores) + self.individual_weight * final_scores[0]
+            else:
+                utility = candidate.players[actor].score
             key = (utility, logit, action)
             if local_i not in best or key > best[local_i]:
                 best[local_i] = key
         for local_i, original_i in enumerate(search_rows):
             base_actions[original_i] = best[local_i][2]
         return base_actions
+
+
+class RoleAgent:
+    """Two-network cooperative policy with fixed builder/support seat roles."""
+
+    def __init__(self, checkpoint: str | Path, device: str = "cpu"):
+        self.device = torch.device(device)
+        data = torch.load(checkpoint, map_location=self.device, weights_only=False)
+        self.nets = []
+        for state in data["models"]:
+            net = PolicyValueNet(
+                obs_size=data.get("obs_size", OBS_SIZE), hidden=data.get("hidden", 256)
+            ).to(self.device)
+            net.load_state_dict(state); net.eval(); self.nets.append(net)
+
+    def choose(self, game: AzulGame) -> int:
+        return self.choose_many([game])[0]
+
+    @torch.inference_mode()
+    def choose_many(self, games: list[AzulGame]) -> list[int]:
+        result = [0] * len(games)
+        for role in (0, 1):
+            rows = [i for i, game in enumerate(games) if game.current_player == role]
+            if not rows:
+                continue
+            obs = torch.from_numpy(np.stack([games[i].observation() for i in rows])).to(self.device)
+            masks = torch.from_numpy(np.stack([games[i].legal_mask() for i in rows])).to(self.device)
+            logits, _ = self.nets[role](obs); logits.masked_fill_(~masks, -1e9)
+            actions = logits.argmax(1).tolist()
+            for row, action in zip(rows, actions):
+                result[row] = int(action)
+        return result
 
 
 def play_game(agent0, agent1, seed: int) -> AzulGame:
@@ -442,6 +581,7 @@ def evaluate_self_play_batched(agent: NeuralAgent, games: int = 100, seed: int =
         for game, action in zip(active, actions):
             game.step(action)
     scores = np.asarray([player.score for game in states for player in game.players], dtype=np.float32)
+    score_pairs = np.asarray([[player.score for player in game.players] for game in states], dtype=np.float32)
     outer_stars = sum(all(star) for game in states for player in game.players for star in player.outer)
     center_stars = sum(all(c >= 0 for c in player.center) for game in states for player in game.players)
     return {
@@ -452,6 +592,9 @@ def evaluate_self_play_batched(agent: NeuralAgent, games: int = 100, seed: int =
         "p10_score": float(np.percentile(scores, 10)),
         "p90_score": float(np.percentile(scores, 90)),
         "max_score": int(scores.max()),
+        "mean_p0_score": float(score_pairs[:, 0].mean()),
+        "mean_p1_score": float(score_pairs[:, 1].mean()),
+        "max_combined_score": int(score_pairs.sum(axis=1).max()),
         "outer_stars_per_player": outer_stars / scores.size,
         "center_stars_per_player": center_stars / scores.size,
     }
