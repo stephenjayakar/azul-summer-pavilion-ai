@@ -5,6 +5,7 @@ __pycache__/
 node_modules/
 checkpoints/**/*.pt
 training_runs/
+log/
 rule-page-*.png
 page2-hi.png
 board-crop.png

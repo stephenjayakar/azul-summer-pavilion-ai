@@ -206,6 +206,17 @@ def test_end_game_star_and_number_bonuses_and_leftover_loss():
     before = p.score
     g._final_score()
     assert p.score == before + 20 + 4 - 2
+    breakdown = g.final_score_breakdown[0]
+    assert breakdown == {
+        "player": 0,
+        "score_before_final": before,
+        "completed_stars": [{"color": "purple", "points": 20}],
+        "center_bonus": 0,
+        "number_bonuses": [{"number": 1, "points": 4}],
+        "leftover_penalty": 2,
+        "final_bonus_total": 24,
+        "final_score": before + 22,
+    }
 
 
 def test_random_games_terminate_and_preserve_tiles():

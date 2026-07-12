@@ -46,6 +46,8 @@ const FEATURE_COPY = {
   },
 };
 const MOTION_STORAGE_KEY = "pavilion-atelier-animations";
+const TILE_FLIGHT_DURATION_MS = 830;
+const AI_FLIGHT_GAP_MS = 130;
 
 function initialMotionPreference() {
   try {
@@ -144,6 +146,7 @@ function captureAiFlightSpecs(descriptions = []) {
         color,
         count: Number(sourceElement.dataset.tileCount) || 1,
         from,
+        sourceIndex,
         targets: [
           `.opponent-pavilion .inventory-shelf [data-tile-color="${color}"]`,
           ".opponent-pavilion .inventory-tiles",
@@ -224,6 +227,17 @@ function captureAiFlightSpecs(descriptions = []) {
   });
 }
 
+function captureAiFactoryVisuals(descriptions = [], factories = []) {
+  return descriptions.reduce((visuals, description) => {
+    const match = description.match(/^take \w+ from factory (\d+)$/);
+    if (!match) return visuals;
+    const sourceIndex = Number(match[1]) - 1;
+    const factory = factories[sourceIndex];
+    if (factory) visuals[sourceIndex] = { ...factory };
+    return visuals;
+  }, {});
+}
+
 function classNames(...values) {
   return values.filter(Boolean).join(" ");
 }
@@ -295,22 +309,36 @@ function TileFace({ color, count, small = false }) {
   );
 }
 
-function TileCluster({ color, count, companionWild = false, wildColor }) {
+function TileCluster({
+  color,
+  count,
+  companionWild = false,
+  wildColor,
+  spread = false,
+}) {
   return (
-    <span className="tile-cluster" aria-hidden="true">
-      <span className="tile-stack-visual">
-        {Array.from({ length: Math.min(count, 3) }, (_, index) => (
+    <span
+      className={classNames("tile-cluster", spread && "is-spread")}
+      aria-hidden="true"
+    >
+      <span className={spread ? "tile-spread-visual" : "tile-stack-visual"}>
+        {Array.from({ length: spread ? count : Math.min(count, 3) }, (_, index) => (
           <span
             className={classNames("tile-layer", color)}
-            style={{ "--layer": index }}
+            style={spread ? undefined : { "--layer": index }}
             key={index}
           >
             {tileLetter(color)}
           </span>
         ))}
+        {spread && companionWild && (
+          <span className={classNames("tile-layer", wildColor)}>
+            {tileLetter(wildColor)}
+          </span>
+        )}
       </span>
-      <b className="tile-count">×{count}</b>
-      {companionWild && (
+      {!spread && <b className="tile-count">×{count}</b>}
+      {companionWild && !spread && (
         <span className={classNames("wild-companion", wildColor)}>
           + {tileLetter(wildColor)} wild
         </span>
@@ -328,11 +356,17 @@ function TileGroup({
   companionWild = false,
   wildColor,
   context,
+  spread = false,
+  renderCompanionWild = true,
 }) {
   const actionable = Boolean(action) && !busy;
-  const label =
+  const baseLabel =
     action?.description ||
     `${count} ${color} tile${count === 1 ? "" : "s"}${context ? ` in ${context}` : ""}`;
+  const label =
+    action && companionWild
+      ? `${baseLabel} and one ${wildColor} wild`
+      : baseLabel;
   if (!action) {
     return (
       <span
@@ -345,8 +379,9 @@ function TileGroup({
         <TileCluster
           color={color}
           count={count}
-          companionWild={companionWild}
+          companionWild={companionWild && renderCompanionWild}
           wildColor={wildColor}
+          spread={spread}
         />
       </span>
     );
@@ -371,10 +406,22 @@ function TileGroup({
       <TileCluster
         color={color}
         count={count}
-        companionWild={companionWild}
+        companionWild={companionWild && renderCompanionWild}
         wildColor={wildColor}
+        spread={spread}
       />
     </button>
+  );
+}
+
+function draftDisplayColors(source, wild) {
+  const hasNonWild = COLORS.some(
+    (color) => color !== wild && source[color],
+  );
+  // A wild tile is taken automatically with a non-wild draft. Keep it in the
+  // actionable group instead of rendering a separate, misleading static tile.
+  return COLORS.filter(
+    (color) => source[color] && (color !== wild || !hasNonWild),
   );
 }
 
@@ -859,7 +906,13 @@ function PlayerPanel({
   );
 }
 
-function DraftSurface({ game, busy, onAction, recentChanges }) {
+function DraftSurface({
+  game,
+  busy,
+  onAction,
+  recentChanges,
+  deferredFactories = {},
+}) {
   const draftActions = game.legal_actions.filter(
     (action) => action.kind === "draft",
   );
@@ -886,7 +939,8 @@ function DraftSurface({ game, busy, onAction, recentChanges }) {
       </header>
       <div className="factories">
         {game.factories.map((factory, index) => {
-          const total = Object.values(factory).reduce(
+          const displayedFactory = deferredFactories[index] || factory;
+          const total = Object.values(displayedFactory).reduce(
             (sum, count) => sum + count,
             0,
           );
@@ -905,25 +959,29 @@ function DraftSurface({ game, busy, onAction, recentChanges }) {
                 {String(index + 1).padStart(2, "0")}
               </span>
               <div className="factory-tiles">
-                {COLORS.filter((color) => factory[color]).map((color) => {
-                  const action = draftAction(index, color);
-                  const companionWild = Boolean(
-                    action && color !== game.wild && factory[game.wild],
-                  );
-                  return (
-                    <TileGroup
-                      key={color}
-                      color={color}
-                      count={factory[color]}
-                      action={action}
-                      busy={busy}
-                      onAction={onAction}
-                      companionWild={companionWild}
-                      wildColor={game.wild}
-                      context={`workshop ${index + 1}`}
-                    />
-                  );
-                })}
+                {COLORS.flatMap((color) =>
+                  Array.from({ length: displayedFactory[color] }, (_, tileIndex) => {
+                    const action = draftAction(index, color);
+                    const companionWild = Boolean(
+                      action && color !== game.wild && displayedFactory[game.wild],
+                    );
+                    return (
+                      <TileGroup
+                        key={`${color}-${tileIndex}`}
+                        color={color}
+                        count={1}
+                        action={action}
+                        busy={busy}
+                        onAction={onAction}
+                        companionWild={companionWild}
+                        renderCompanionWild={false}
+                        wildColor={game.wild}
+                        context={`workshop ${index + 1}`}
+                        spread
+                      />
+                    );
+                  }),
+                )}
                 {!total && <span className="empty-copy">Empty</span>}
               </div>
             </article>
@@ -958,7 +1016,7 @@ function DraftSurface({ game, busy, onAction, recentChanges }) {
                 1
               </span>
             )}
-            {COLORS.filter((color) => game.center_pool[color]).map((color) => (
+            {draftDisplayColors(game.center_pool, game.wild).map((color) => (
               <TileGroup
                 key={color}
                 color={color}
@@ -1034,14 +1092,18 @@ function PaymentChooser({ choice, wild, busy, onAction, onClose }) {
       </div>
       <div className="payment-options">
         {choice.actions.map((action) => {
+          // Outer-star actions carry their tile color in `choice.color`, while
+          // center-star actions carry it on each action. Never reuse the first
+          // center action's color for every payment button.
+          const paymentColor = action.color || choice.color;
           const wildCount = action.cost - action.natural;
-          const paymentLabel = `Pay ${action.natural} ${choice.color} tile${action.natural === 1 ? "" : "s"}${wildCount ? ` and ${wildCount} ${wild} wild tile${wildCount === 1 ? "" : "s"}` : ""}`;
+          const paymentLabel = `Pay ${action.natural} ${paymentColor} tile${action.natural === 1 ? "" : "s"}${wildCount ? ` and ${wildCount} ${wild} wild tile${wildCount === 1 ? "" : "s"}` : ""}`;
           return (
             <button
               type="button"
               onClick={() =>
                 onAction(action.id, {
-                  color: choice.color,
+                  color: paymentColor,
                   targetRect: choice.targetRect,
                 })
               }
@@ -1050,7 +1112,7 @@ function PaymentChooser({ choice, wild, busy, onAction, onClose }) {
               title={paymentLabel}
               key={action.id}
             >
-              <TileFace color={choice.color} count={action.natural} />
+              <TileFace color={paymentColor} count={action.natural} />
               {wildCount > 0 && (
                 <>
                   <span className="payment-plus">+</span>
@@ -1214,6 +1276,122 @@ function RewardEvent({ events }) {
   );
 }
 
+function FinalScoring({ game }) {
+  if (!game.done || !game.final_scoring?.length) return null;
+  return (
+    <section className="final-scoring" aria-labelledby="final-scoring-title">
+      <header className="final-scoring-header">
+        <span>
+          <span className="eyebrow">Final tally</span>
+          <h2 id="final-scoring-title">How the pavilions scored</h2>
+        </span>
+        <p>
+          The running score already includes tile-placement connections and
+          earlier penalties. Final bonuses are added below.
+        </p>
+      </header>
+      <div className="score-ledgers">
+        {game.final_scoring.map((breakdown, playerIndex) => {
+          const player = game.players[playerIndex];
+          const isWinner =
+            game.winner === "tie" ||
+            (game.winner === "human" && playerIndex === 0) ||
+            (game.winner === "ai" && playerIndex === 1);
+          return (
+            <article
+              className={classNames("score-ledger", isWinner && "is-winner")}
+              key={playerIndex}
+            >
+              <header>
+                <span className="avatar">{playerIndex ? "AI" : "YOU"}</span>
+                <span>
+                  <span className="eyebrow">
+                    {isWinner ? (game.winner === "tie" ? "Tied" : "Winner") : "Final score"}
+                  </span>
+                  <strong>
+                    {playerIndex ? game.opponent_name : "Your pavilion"}
+                  </strong>
+                </span>
+                <b>{breakdown.final_score}</b>
+              </header>
+              <div className="score-lines">
+                <div className="score-line is-subtotal">
+                  <span>
+                    <strong>Score before final bonuses</strong>
+                    <small>Placements, connections, and round penalties</small>
+                  </span>
+                  <b>{breakdown.score_before_final}</b>
+                </div>
+                {breakdown.completed_stars.map((star) => (
+                  <div className="score-line" key={star.color}>
+                    <span className="score-line-label">
+                      <TileFace color={star.color} small />
+                      <span>
+                        <strong>{star.color} star complete</strong>
+                        <small>All six spaces filled</small>
+                      </span>
+                    </span>
+                    <b>+{star.points}</b>
+                  </div>
+                ))}
+                {!!breakdown.center_bonus && (
+                  <div className="score-line">
+                    <span>
+                      <strong>Center star complete</strong>
+                      <small>All six center spaces filled</small>
+                    </span>
+                    <b>+{breakdown.center_bonus}</b>
+                  </div>
+                )}
+                {breakdown.number_bonuses.map((bonus) => (
+                  <div className="score-line" key={bonus.number}>
+                    <span>
+                      <strong>All number {bonus.number} spaces</strong>
+                      <small>Covered across all seven stars</small>
+                    </span>
+                    <b>+{bonus.points}</b>
+                  </div>
+                ))}
+                {!breakdown.completed_stars.length &&
+                  !breakdown.center_bonus &&
+                  !breakdown.number_bonuses.length && (
+                    <div className="score-line is-muted">
+                      <span>
+                        <strong>No completed final-bonus sets</strong>
+                        <small>The running score carries through unchanged</small>
+                      </span>
+                      <b>+0</b>
+                    </div>
+                  )}
+                <div className="score-line is-penalty">
+                  <span>
+                    <strong>Unused tiles</strong>
+                    <small>One point lost per inventory or kept tile</small>
+                  </span>
+                  <b>
+                    {breakdown.leftover_penalty
+                      ? `−${breakdown.leftover_penalty}`
+                      : "−0"}
+                  </b>
+                </div>
+              </div>
+              <footer>
+                <span>Total</span>
+                <strong>{breakdown.final_score}</strong>
+              </footer>
+            </article>
+          );
+        })}
+      </div>
+      <p className="scoring-rule-note">
+        Complete outer stars earn their printed bonus; the full center earns
+        12. Covering every number 1, 2, 3, or 4 across all seven stars earns
+        4, 8, 12, or 16 points. Scores cannot fall below 1.
+      </p>
+    </section>
+  );
+}
+
 function MotionToggle({ enabled, onChange, previewing }) {
   return (
     <label
@@ -1311,11 +1489,13 @@ function App() {
   const [motionPreview, setMotionPreview] = useState(false);
   const [tileFlight, setTileFlight] = useState(null);
   const [pendingAiFlightSpecs, setPendingAiFlightSpecs] = useState([]);
+  const [deferredAiFactories, setDeferredAiFactories] = useState({});
   const actionTimer = useRef(null);
   const thinkingTimer = useRef(null);
   const previewTimer = useRef(null);
   const flightTimer = useRef(null);
   const activeFlight = useRef(null);
+  const humanFlightEndsAt = useRef(0);
   const aiFlightTimers = useRef([]);
   const actionSequence = useRef(0);
   const flightSequence = useRef(0);
@@ -1386,11 +1566,13 @@ function App() {
     aiFlightTimers.current.forEach((timer) => window.clearTimeout(timer));
     aiFlightTimers.current = [];
     setPendingAiFlightSpecs([]);
+    setDeferredAiFactories({});
     setActionPhase(animateAction ? "is-action-pending" : "");
     if (!animateAction) {
       setRecentChanges(null);
       setActionCue(null);
       activeFlight.current = null;
+      humanFlightEndsAt.current = 0;
       setTileFlight(null);
     }
     setBusy(true);
@@ -1405,8 +1587,13 @@ function App() {
         animateAction && motionEnabled
           ? captureAiFlightSpecs(next.last_ai_actions)
           : [];
+      const aiFactoryVisuals =
+        animateAction && motionEnabled
+          ? captureAiFactoryVisuals(next.last_ai_actions, game?.factories)
+          : {};
       setGame(next);
       setPendingAiFlightSpecs(aiFlightSpecs);
+      setDeferredAiFactories(aiFactoryVisuals);
       if (animateAction) {
         const playedAction = game?.legal_actions?.find(
           (action) => action.id === body.action,
@@ -1446,6 +1633,7 @@ function App() {
       activeFlight.current = null;
       setTileFlight(null);
       setPendingAiFlightSpecs([]);
+      setDeferredAiFactories({});
       setError(caught.message);
     } finally {
       setBusy(false);
@@ -1532,6 +1720,7 @@ function App() {
     if (flightTimer.current) window.clearTimeout(flightTimer.current);
     const flight = createTileFlight(color, context.count, from, to);
     activeFlight.current = flight;
+    humanFlightEndsAt.current = Date.now() + TILE_FLIGHT_DURATION_MS;
     setTileFlight(flight);
   };
 
@@ -1544,10 +1733,25 @@ function App() {
         .find(Boolean);
       const to = elementRect(targetElement);
       return to
-        ? [createTileFlight(spec.color, spec.count, spec.from, to)]
+        ? [{
+            ...createTileFlight(spec.color, spec.count, spec.from, to),
+            sourceIndex: spec.sourceIndex,
+          }]
         : [];
     });
     setPendingAiFlightSpecs([]);
+    const flightSources = new Set(
+      flights
+        .map((flight) => flight.sourceIndex)
+        .filter((sourceIndex) => Number.isInteger(sourceIndex)),
+    );
+    setDeferredAiFactories((current) =>
+      Object.fromEntries(
+        Object.entries(current).filter(([sourceIndex]) =>
+          flightSources.has(Number(sourceIndex)),
+        ),
+      ),
+    );
     if (!flights.length) return;
 
     const schedule = (callback, delay) => {
@@ -1556,19 +1760,29 @@ function App() {
     };
     const playFlight = (index) => {
       const flight = { ...flights[index], startedAt: Date.now() };
+      if (Number.isInteger(flight.sourceIndex)) {
+        setDeferredAiFactories((current) => {
+          const next = { ...current };
+          delete next[flight.sourceIndex];
+          return next;
+        });
+      }
       activeFlight.current = flight;
       setTileFlight(flight);
       schedule(() => {
         activeFlight.current = null;
         setTileFlight(null);
         if (index + 1 < flights.length) {
-          schedule(() => playFlight(index + 1), 130);
+          schedule(() => playFlight(index + 1), AI_FLIGHT_GAP_MS);
         }
       }, 830);
     };
 
-    const humanFlightDelay = activeFlight.current
-      ? Math.max(180, 880 - (Date.now() - activeFlight.current.startedAt)) + 130
+    // The API response includes the completed AI turn, so it can arrive after
+    // the player's flight has already been removed from state. Keep the end
+    // time separately so AI movement never starts before the player's motion.
+    const humanFlightDelay = humanFlightEndsAt.current
+      ? Math.max(0, humanFlightEndsAt.current - Date.now()) + AI_FLIGHT_GAP_MS
       : 90;
     schedule(() => playFlight(0), humanFlightDelay);
   }, [pendingAiFlightSpecs, motionEnabled]);
@@ -1583,6 +1797,7 @@ function App() {
     setMotionEnabled(enabled);
     if (!enabled) {
       activeFlight.current = null;
+      humanFlightEndsAt.current = 0;
       setTileFlight(null);
       setPendingAiFlightSpecs([]);
       aiFlightTimers.current.forEach((timer) => window.clearTimeout(timer));
@@ -1676,6 +1891,11 @@ function App() {
                 </option>
               ))}
             </select>
+            {selectedOpponent?.description && (
+              <p className="opponent-description" aria-live="polite">
+                {selectedOpponent.description}
+              </p>
+            )}
           </div>
           <button
             type="button"
@@ -1707,6 +1927,7 @@ function App() {
         )}
         <StatusStrip game={game} />
         <RewardEvent events={game.reward_events} />
+        <FinalScoring game={game} />
         <div className="game-layout">
           <div className="left-rail">
             <DraftSurface
@@ -1714,6 +1935,7 @@ function App() {
               busy={busy}
               onAction={playAction}
               recentChanges={recentChanges}
+              deferredFactories={deferredAiFactories}
             />
             {game.last_ai_actions?.length > 0 && (
               <aside className="ai-log">

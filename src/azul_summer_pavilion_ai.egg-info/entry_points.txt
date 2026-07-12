@@ -1,0 +1,2 @@
+[console_scripts]
+azul-web = azul.web:main

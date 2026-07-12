@@ -19,6 +19,7 @@ from .agents import (
     RolloutAgent,
 )
 from .game import AzulGame, COLORS, decode_action
+from .game_log import GameLog
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -47,41 +48,49 @@ def _rollout(relative: str):
 
 OPPONENTS: dict[str, tuple[str, str, Callable[[], object], str | None]] = {
     "competitive_hybrid": (
-        "Competitive hybrid", "Best verified 1v1: 59% match score against the strong benchmark",
+        "Competitive hybrid",
+        "Recommended match-play opponent: a rules-aware tactical filter with the competitive neural policy breaking close ties.",
         lambda: _hybrid("checkpoints/best_competitive.pt"),
         "checkpoints/best_competitive.pt",
     ),
     "score_neural": (
-        "Score champion", "Highest-scoring raw policy: 101.077 mean on the fixed self-play gate",
+        "Score champion",
+        "Pure score-maximizing neural policy trained to chase personal points, star bonuses, and high-scoring finishes.",
         lambda: _neural("checkpoints/best_score.pt"),
         "checkpoints/best_score.pt",
     ),
     "score_rollout": (
-        "Score champion + search", "Score policy with final-round rollout search; slower but sharper",
+        "Score champion + search",
+        "The score champion with deterministic full-game look-ahead in the final round; sharper endgame play, but slower.",
         lambda: _rollout("checkpoints/best_score.pt"),
         "checkpoints/best_score.pt",
     ),
     "score_hybrid": (
-        "Score hybrid", "Score policy constrained by tactical guardrails",
+        "Score hybrid",
+        "Score-focused neural policy with tactical guardrails to avoid obviously wasteful placements and resource trades.",
         lambda: _hybrid("checkpoints/best_score.pt"),
         "checkpoints/best_score.pt",
     ),
     "competitive_neural": (
-        "Competitive neural", "Raw neural policy trained for head-to-head play",
+        "Competitive neural",
+        "Pure neural policy trained for head-to-head play; fast and direct, without the hand-written tactical filter.",
         lambda: _neural("checkpoints/best_competitive.pt"),
         "checkpoints/best_competitive.pt",
     ),
     "multi_outer": (
-        "Experimental multi-star", "Experimental policy that completes more outer stars",
+        "Experimental multi-star",
+        "Experimental neural policy seeded to develop multiple outer stars; interesting and varied, but not fully tuned.",
         lambda: _neural("checkpoints/multi_outer_recover_v3/latest.pt"),
         "checkpoints/multi_outer_recover_v3/latest.pt",
     ),
     "heuristic": (
-        "Strategic heuristic", "Fast handcrafted strategic baseline",
+        "Strategic heuristic",
+        "Fast, transparent hand-written player that values immediate scoring, connected tiles, bonuses, and useful drafts.",
         lambda: HeuristicAgent(17), None,
     ),
     "random": (
-        "Random", "Gentle introduction; selects uniformly from legal moves",
+        "Random",
+        "Chooses uniformly from legal moves; useful for a gentle demo or rules testing, not a competitive challenge.",
         lambda: RandomAgent(17), None,
     ),
 }
@@ -197,13 +206,15 @@ def _action_payload(game: AzulGame, action_id: int) -> dict:
 
 
 class GameSession:
-    def __init__(self):
+    def __init__(self, log_dir: str | Path | None = None):
         self.lock = threading.RLock()
+        self.log_dir = Path(log_dir) if log_dir is not None else PROJECT_ROOT / "log"
         self.game: AzulGame | None = None
         self.agent = None
         self.opponent_id = "competitive_hybrid"
         self.last_ai_actions: list[str] = []
         self.reward_events: list[dict] = []
+        self.game_log: GameLog | None = None
 
     def new_game(self, opponent_id: str, seed: int | None = None) -> dict:
         if opponent_id not in OPPONENTS:
@@ -212,9 +223,18 @@ class GameSession:
         if checkpoint and not _checkpoint(checkpoint).exists():
             raise FileNotFoundError(f"Missing checkpoint: {checkpoint}")
         with self.lock:
-            self.agent = factory()
+            agent = factory()
+            self._finish_log("replaced")
+            self.agent = agent
             self.opponent_id = opponent_id
             self.game = AzulGame(seed=seed)
+            self.game_log = GameLog(self.log_dir)
+            self.game_log.start(
+                seed=seed,
+                opponent_id=opponent_id,
+                opponent_name=name,
+                num_players=self.game.num_players,
+            )
             self.last_ai_actions = []
             self.reward_events = []
             self._play_ai_turns()
@@ -233,8 +253,7 @@ class GameSession:
             if not self.game.pending_bonus:
                 self.reward_events = []
             before_claimed = [set(player.claimed) for player in self.game.players]
-            self.game.step(action_id)
-            self._record_reward_events(before_claimed)
+            self._play_action(action_id, actor="human", before_claimed=before_claimed)
             self._play_ai_turns()
             return self.payload()
 
@@ -258,11 +277,57 @@ class GameSession:
             action = self.agent.choose(self.game)
             self.last_ai_actions.append(self.game.action_description(action))
             before_claimed = [set(player.claimed) for player in self.game.players]
-            self.game.step(action)
-            self._record_reward_events(before_claimed)
+            self._play_action(action, actor="ai", before_claimed=before_claimed)
             guard += 1
             if guard > 100:
                 raise RuntimeError("AI turn loop exceeded safety limit")
+
+    def _play_action(self, action_id: int, *, actor: str, before_claimed: list[set]) -> None:
+        """Apply an action and persist the state/action transition."""
+        game = self.game
+        if game is None:
+            raise ValueError("Start a game first")
+
+        player = game.current_player
+        before = {
+            "player": player,
+            "actor": actor,
+            "action_id": action_id,
+            "action": _action_payload(game, action_id),
+            "round": game.round + 1,
+            "phase": game.phase,
+            "current_player": game.current_player,
+            "observation": game.observation(perspective=player).tolist(),
+            "legal_action_ids": game.legal_actions(),
+        }
+        event_count = len(self.reward_events)
+        game.step(action_id)
+        self._record_reward_events(before_claimed)
+        if self.game_log is not None:
+            self.game_log.action({
+                **before,
+                "round_after": game.round + 1,
+                "phase_after": game.phase,
+                "current_player_after": game.current_player,
+                "done_after": game.done,
+                "scores_after": [player.score for player in game.players],
+                "reward_events": self.reward_events[event_count:],
+            })
+        if game.done:
+            self._finish_log("completed")
+
+    def _finish_log(self, reason: str) -> None:
+        if self.game_log is None or self.game is None:
+            return
+        game = self.game
+        self.game_log.finish(
+            done=game.done,
+            reason=reason,
+            round_number=game.round + 1,
+            phase=game.phase,
+            scores=[player.score for player in game.players],
+            winner=game.winner(),
+        )
 
     def payload(self) -> dict:
         if self.game is None:
@@ -293,6 +358,7 @@ class GameSession:
             "next_start_player": game.next_start_player,
             "done": game.done,
             "winner": winner,
+            "final_scoring": game.final_score_breakdown if game.done else None,
             "players": [_player_payload(player, i) for i, player in enumerate(game.players)],
             "factories": [dict(zip(COLORS, factory)) for factory in game.factories],
             "center_pool": dict(zip(COLORS, game.center_pool)),

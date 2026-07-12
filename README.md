@@ -32,6 +32,23 @@ Then open <http://127.0.0.1:8000> in a browser. The opponent menu includes the c
 
 `checkpoints/best.pt` and `checkpoints/latest.pt` currently alias the high-score policy. The separate `best_competitive.pt` is preserved because its tactical hybrid remains the stronger match-play opponent.
 
+## AI opponents
+
+The opponent menu contains several policies with different goals. “Hybrid” means a hand-written, rules-aware heuristic first narrows the legal moves to strategically sensible candidates, then a neural network chooses among close alternatives. “Neural” means the network chooses directly from the legal-action mask. “Score” policies optimize the player's own final score; “competitive” policies were trained or selected for head-to-head play.
+
+| Opponent | How it plays | Best for |
+| --- | --- | --- |
+| **Competitive hybrid** | Tactical guardrails plus the competitive neural policy as a tie-breaker. It avoids obvious resource mistakes and is the strongest verified match-play mode. | The default challenge |
+| **Score champion** | A pure neural policy trained to maximize personal score and final bonuses. It is ambitious about building a high-scoring pavilion and is less explicitly defensive. | Seeing the highest-scoring style |
+| **Score champion + search** | The score champion, with deterministic full-game rollout search added in the final round. It can make sharper endgame decisions, at the cost of more thinking time. | A slower, stronger endgame |
+| **Score hybrid** | The score-focused neural policy constrained by tactical guardrails. It keeps the score objective while filtering out obviously poor trades. | A score-oriented middle ground |
+| **Competitive neural** | The raw competitive neural policy without the hand-written tactical filter. It is fast and direct, but can make less robust tactical choices. | Comparing raw learned play |
+| **Experimental multi-star** | A research policy seeded to develop multiple outer stars rather than concentrating on one dominant scoring plan. It is intentionally not fully tuned. | Variety and experimentation |
+| **Strategic heuristic** | A fast, transparent hand-written baseline that values immediate scoring, connected placements, architectural rewards, and useful drafts. | Quick games and a readable baseline |
+| **Random** | Uniformly selects among legal moves. It knows the rules but has no strategy. | A gentle demo or rules testing |
+
+The learned policies are not “difficulty levels” in a perfectly ordered ladder: they optimize different objectives. For a normal game, start with **Competitive hybrid**; use **Strategic heuristic** for speed, **Random** for a relaxed introduction, and the score policies when you want to watch pavilion-building and bonus-chasing behavior.
+
 The CLI abbreviates colors in inventories (`p`, `g`, `o`, `y`, `b`, `r`) and lists every legal move. When placing a tile, “using N natural” is meaningful because you may choose how many current-round wild tiles to spend. One natural tile is always required unless placing the wild color on its own matching star.
 
 ## Score-maximizing self-play

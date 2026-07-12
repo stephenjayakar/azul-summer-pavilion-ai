@@ -128,6 +128,7 @@ class AzulGame:
         self.supply = [0] * 6
         self.pending_bonus = 0
         self.pending_bonus_player = -1
+        self.final_score_breakdown: list[dict] = []
         self.done = False
         self._fill_supply()
         self._fill_factories()
@@ -399,18 +400,46 @@ class AzulGame:
         self.current_player = self.start_player
 
     def _final_score(self) -> None:
-        for p in self.players:
+        self.final_score_breakdown = []
+        for player_index, p in enumerate(self.players):
+            score_before = p.score
+            completed_stars = []
             for color in range(6):
                 if all(p.outer[color]):
                     p.score += STAR_BONUSES[color]
+                    completed_stars.append({
+                        "color": COLORS[color],
+                        "points": STAR_BONUSES[color],
+                    })
+            center_bonus = 0
             if all(c >= 0 for c in p.center):
                 p.score += 12
+                center_bonus = 12
+            number_bonuses = []
             for slot, bonus in enumerate((4, 8, 12, 16)):
                 covered = sum(p.outer[s][slot] for s in range(6)) + (p.center[slot] >= 0)
                 if covered == 7:
                     p.score += bonus
+                    number_bonuses.append({
+                        "number": slot + 1,
+                        "points": bonus,
+                    })
             leftovers = sum(p.stored) + sum(p.inventory)
             p.score = max(1, p.score - leftovers)
+            self.final_score_breakdown.append({
+                "player": player_index,
+                "score_before_final": score_before,
+                "completed_stars": completed_stars,
+                "center_bonus": center_bonus,
+                "number_bonuses": number_bonuses,
+                "leftover_penalty": leftovers,
+                "final_bonus_total": (
+                    sum(item["points"] for item in completed_stars)
+                    + center_bonus
+                    + sum(item["points"] for item in number_bonuses)
+                ),
+                "final_score": p.score,
+            })
             for c in range(6):
                 self.tower[c] += p.stored[c] + p.inventory[c]
                 p.stored[c] = p.inventory[c] = 0
