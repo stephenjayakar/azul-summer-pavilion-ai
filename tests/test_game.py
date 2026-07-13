@@ -9,6 +9,25 @@ from azul.game import (
 )
 
 
+def test_snapshot_restore_and_fast_step_match_validated_engine():
+    rng = random.Random(20260712)
+    validated = AzulGame(811)
+    fast = validated.clone()
+    for _ in range(600):
+        if validated.done:
+            break
+        action = rng.choice(validated.legal_actions())
+        before = fast.snapshot()
+        validated.step(action)
+        fast.step_fast(action)
+        assert fast.snapshot() == validated.snapshot()
+        fast.restore(before)
+        assert fast.snapshot() == before
+        fast.step_fast(action)
+    assert validated.done and fast.done
+    assert [p.score for p in validated.players] == [p.score for p in fast.players]
+
+
 # Literal transcription of all normal-board architectural spaces. Cells are
 # (color index, zero-based printed cost); center star is index 6.
 EXPECTED_FEATURES = [

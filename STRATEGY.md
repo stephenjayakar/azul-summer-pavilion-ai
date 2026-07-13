@@ -69,6 +69,143 @@ Targeted rollout search has produced a 149 individual score and a 251 combined s
 
 The clearest AI contribution beyond the blog's headline advice is not “complete purple.” That idea was seeded. It is the narrower finding that **one efficient star package beats indiscriminate star completion**, and that purple is strongest when its expensive cells also close a window, extend a connected component, and preserve the cheap-number structure. The AI also shows that incidental pillars and situational cost-4 completion can be worthwhile even though neither should be a primary objective.
 
+# Addendum: verified AZ2 search champion (2026-07-13)
+
+The project's strongest measured match-play agent is now the structured AZ2
+policy plus stochastic search in `checkpoints/best_az2_search.pt`. Its verified
+deployment uses 128 simulations per decision, persistent subtree reuse, a 75%
+tactical root prior, and 25% learned-value influence. It beat the unchanged
+strategic heuristic 83–44–1 (**65.23%**, +7.34 average margin) on a fresh
+128-game alternating-seat confirmation. Combined with a disjoint preliminary,
+the result is 125–64–3 (**65.89%**) over 192 games.
+
+This agent is not a clean tabula-rasa source of strategic discoveries. Its
+policy descends from the score curriculum described above, and its root search
+deliberately blends the learned prior with the hand-written tactical heuristic.
+Purple was seeded by the outside strategy article, and connected scoring,
+feature rewards, wild preservation, and useful draft size are explicit parts of
+the tactical prior. The findings below are therefore best read as evidence
+about which combinations survived training and deep adversarial search.
+
+## Champion behavior sample
+
+A separate 32-game directional telemetry sample used the full verified
+128-simulation configuration against the strategic heuristic. It scored
+24–7–1 in that small block. The match result is too small to replace the
+128/192-game verification above, but the action and board frequencies are
+useful descriptions of how the champion plays.
+
+| Champion tendency | 32-game sample |
+|---|---:|
+| Mean score | 94.84 |
+| Mean margin | +9.22 |
+| Board tiles | 27.38 per game |
+| Purple stars completed | 53.1% |
+| Other outer stars completed | 0% |
+| Center stars completed | 0% |
+| Center placements | 4.03 per game |
+| All cost-1 spaces completed | 100% |
+| All cost-2 spaces completed | 100% |
+| All cost-3 spaces completed | 75% |
+| All cost-4 spaces completed | 12.5% |
+| Windows / statues / pillars | 0.53 / 4.22 / 2.94 per game |
+| Wild tiles spent | 11.81 per game |
+| Tiles carried | 12.66 per game |
+| First-player tokens | 4.00 per game |
+| Drafts taken from center | 54.4% |
+| Mean tiles gained per draft | 1.94 |
+
+The placement-cost distribution was 25.6% cost 1, 25.6% cost 2, 24.7% cost 3,
+17.9% cost 4, 3.5% cost 5, and 2.7% cost 6. In other words, **93.7% of its
+placements cost four or less**. The 5/6 spaces are not routine construction;
+they are the small expensive capstone of a much larger cheap-space plan.
+
+## What the champion's play suggests
+
+- **Build the cheap skeleton before chasing prestige.** Costs 1 and 2 remain
+  effectively mandatory, and cost 3 remains the normal extension. These cells
+  create connected points, number bonuses, and statue progress at the same
+  time. Cost 4 is conditional; 5 and 6 need unusually strong overlap.
+- **Treat purple plus its window as one package.** Purple-star and window
+  completion were both 53.1% in the sample. This near-perfect coupling is more
+  informative than purple completion alone: the expensive placements are
+  justified when the star bonus, window rebate, and adjacency all pay together.
+- **Do not confuse using the center with completing it.** The champion placed
+  about four center cells per game while never completing the center star. Cheap
+  center cells can close number sets, connect groups, and trigger features
+  without turning center completion into the plan.
+- **Statues are the rebate engine.** More than four statues per game survived
+  both score training and competitive search. Pillars are frequent secondary
+  overlap. Windows are rarer and usually tied to the chosen outer star.
+- **Carry with intent.** Roughly 12.7 carried tiles and 11.8 wilds spent per
+  game show that round boundaries are part of the resource plan. A tile worth
+  keeping should have a named placement or a valuable next-round wild role;
+  carrying arbitrary leftovers is not the same strategy.
+- **Tempo matters more in match play.** The champion took the first-player token
+  four times per game, more often than the older score policy's 2.95. It also
+  drafted from the center slightly more than half the time. Search appears
+  willing to pay the token penalty when initiative, denial, and the center pile
+  jointly compensate for it.
+- **Large drafts are not automatically best.** Its average gain was only 1.94
+  tiles per draft. That does not prove every small draft was a denial, but it is
+  consistent with selecting for exact color, timing, and opponent impact rather
+  than maximizing immediate tile count.
+- **Deep tactics change the value of the same strategic plan.** The verified
+  checkpoint reached 62.5% at 64 simulations on its independent block and
+  65.23% at 128. The board plan did not change; the deeper search improved
+  sequencing, draft timing, payment choices, and responses to the opponent.
+
+## A practical playbook
+
+Before each draft, ask four questions in order:
+
+1. What exact placement does this color buy this round?
+2. If it is carried, what does it buy next round, and will it become wild?
+3. Does taking it also remove a critical affordable placement from the
+   opponent?
+4. If it comes from the center, are the pile and next-round initiative worth
+   the first-player penalty?
+
+During placement:
+
+1. Complete cheap connected cells and statue prerequisites first.
+2. Time a feature so its supply reward contains colors that extend the same
+   plan; a rebate of unusable colors is much weaker than its printed tile count.
+3. Spend wilds on bottlenecks, not merely on the first legal substitution.
+4. Place a cost-5/6 cell only when it does at least two jobs—ideally star plus
+   window, with adjacency or number progress as a third.
+5. Keep up to four tiles rather than forcing an isolated placement, but name
+   their next-round jobs before committing to the carry.
+
+In the final rounds, compare moves by **score margin**, not just personal score.
+A lower-scoring draft can be correct when it removes the opponent's star,
+number-set, or feature completion while preserving your own coherent finish.
+This is the main strategic distinction between the score champion and the AZ2
+match champion.
+
+## Playing against the champion
+
+- Contest purple costs 5/6 or the adjacent window colors when the denial is
+  cheap. Denying a random purple tile is less useful than breaking the package.
+- Watch its next-round wild conversion before leaving a convenient center pile.
+- Force a choice between initiative and a weak first-player pile; the champion
+  actively values tempo and will otherwise collect both.
+- Pressure the cost-3 skeleton and statue intersections. They are more central
+  to its engine than flashy cost-6 placements.
+- Do not race a second outer star merely because the champion has one. Its own
+  evidence says star count without efficient overlap lowers score.
+
+## Limits of the evidence
+
+The 32-game telemetry block is descriptive and noisy. The 65.23% result is a
+stronger match-strength measurement, but it is against one fixed strategic
+heuristic, not a proof of optimal play or universal 65% strength. Several
+candidates passed 32/64-game preliminary arenas and failed fresh confirmation;
+only independently confirmed results are promoted in this project. The supplied
+human logs currently contain two complete games and two useful partial games;
+they are valuable safety and imitation examples, but far too small to support
+new population-level strategy claims.
+
 # Pareto frontier
 
 “How well can an AI do?” has two different answers in a two-player game. Competitive play tries to beat the opponent. A score-pair frontier instead asks how high both final scores can be when the players share the same 120 factory tiles. A score pair is Pareto-optimal when neither player's score can be improved without lowering the other's under the model being measured.

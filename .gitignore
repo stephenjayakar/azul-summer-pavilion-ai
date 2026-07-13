@@ -4,6 +4,7 @@ __pycache__/
 .venv/
 node_modules/
 checkpoints/**/*.pt
+checkpoints/alphazero_*/
 training_runs/
 log/
 rule-page-*.png

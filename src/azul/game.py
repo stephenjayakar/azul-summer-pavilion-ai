@@ -101,6 +101,39 @@ class PlayerState:
         return sum(map(sum, self.outer)) + sum(c >= 0 for c in self.center)
 
 
+@dataclass(frozen=True, slots=True)
+class PlayerSnapshot:
+    score: int
+    inventory: tuple[int, ...]
+    stored: tuple[int, ...]
+    outer: tuple[tuple[bool, ...], ...]
+    center: tuple[int, ...]
+    passed: bool
+    keeping: bool
+    keep_count: int
+    claimed: frozenset[tuple[str, int]]
+
+
+@dataclass(frozen=True, slots=True)
+class GameSnapshot:
+    round: int
+    phase: str
+    current_player: int
+    start_player: int
+    next_start_player: int | None
+    players: tuple[PlayerSnapshot, ...]
+    bag: tuple[int, ...]
+    tower: tuple[int, ...]
+    factories: tuple[tuple[int, ...], ...]
+    center_pool: tuple[int, ...]
+    supply: tuple[int, ...]
+    pending_bonus: int
+    pending_bonus_player: int
+    final_score_breakdown: tuple[tuple[tuple[str, object], ...], ...]
+    done: bool
+    rng_state: object
+
+
 class AzulGame:
     """Rules engine for the normal, colored side of 2–4 player Summer Pavilion.
 
@@ -139,6 +172,84 @@ class AzulGame:
 
     def clone(self) -> "AzulGame":
         return copy.deepcopy(self)
+
+    def snapshot(self) -> GameSnapshot:
+        """Capture mutable state for fast search apply/undo.
+
+        This deliberately avoids copying the game object, Random instance, and
+        dataclass scaffolding.  All captured containers are immutable, so one
+        snapshot can be restored repeatedly during tree traversal.
+        """
+        players = tuple(PlayerSnapshot(
+            score=p.score,
+            inventory=tuple(p.inventory),
+            stored=tuple(p.stored),
+            outer=tuple(tuple(star) for star in p.outer),
+            center=tuple(p.center),
+            passed=p.passed,
+            keeping=p.keeping,
+            keep_count=p.keep_count,
+            claimed=frozenset(p.claimed),
+        ) for p in self.players)
+        breakdown = tuple(
+            tuple((key, copy.deepcopy(value)) for key, value in row.items())
+            for row in self.final_score_breakdown
+        )
+        return GameSnapshot(
+            round=self.round,
+            phase=self.phase,
+            current_player=self.current_player,
+            start_player=self.start_player,
+            next_start_player=self.next_start_player,
+            players=players,
+            bag=tuple(self.bag),
+            tower=tuple(self.tower),
+            factories=tuple(tuple(factory) for factory in self.factories),
+            center_pool=tuple(self.center_pool),
+            supply=tuple(self.supply),
+            pending_bonus=self.pending_bonus,
+            pending_bonus_player=self.pending_bonus_player,
+            final_score_breakdown=breakdown,
+            done=self.done,
+            rng_state=self.rng.getstate(),
+        )
+
+    def restore(self, state: GameSnapshot) -> None:
+        """Restore a state produced by :meth:`snapshot` in-place."""
+        self.round = state.round
+        self.phase = state.phase
+        self.current_player = state.current_player
+        self.start_player = state.start_player
+        self.next_start_player = state.next_start_player
+        self.bag[:] = state.bag
+        self.tower[:] = state.tower
+        if len(self.factories) != len(state.factories):
+            self.factories = [list(factory) for factory in state.factories]
+        else:
+            for target, source in zip(self.factories, state.factories):
+                target[:] = source
+        self.center_pool[:] = state.center_pool
+        self.supply[:] = state.supply
+        self.pending_bonus = state.pending_bonus
+        self.pending_bonus_player = state.pending_bonus_player
+        self.done = state.done
+        self.final_score_breakdown = [
+            {key: copy.deepcopy(value) for key, value in row}
+            for row in state.final_score_breakdown
+        ]
+        self.rng.setstate(state.rng_state)
+        for player, saved in zip(self.players, state.players):
+            player.score = saved.score
+            player.inventory[:] = saved.inventory
+            player.stored[:] = saved.stored
+            for star, saved_star in zip(player.outer, saved.outer):
+                star[:] = saved_star
+            player.center[:] = saved.center
+            player.passed = saved.passed
+            player.keeping = saved.keeping
+            player.keep_count = saved.keep_count
+            player.claimed.clear()
+            player.claimed.update(saved.claimed)
 
     def _draw_one(self) -> int | None:
         if sum(self.bag) == 0 and sum(self.tower):
@@ -228,6 +339,18 @@ class AzulGame:
         legal = self.legal_actions()
         if action_id not in legal:
             raise ValueError(f"illegal action {action_id}: {decode_action(action_id)}")
+        self._apply_action(action_id)
+        self.assert_invariants()
+
+    def step_fast(self, action_id: int) -> None:
+        """Apply a trusted legal action without repeated validation.
+
+        Search must obtain actions from ``legal_actions()`` before calling this
+        method. Public gameplay should continue to use :meth:`step`.
+        """
+        self._apply_action(action_id)
+
+    def _apply_action(self, action_id: int) -> None:
         action = decode_action(action_id)
         if action.kind == "draft":
             self._draft(action)
@@ -244,7 +367,6 @@ class AzulGame:
             self._finish_passing()
         elif action.kind == "bonus":
             self._take_bonus(action.color)
-        self.assert_invariants()
 
     def _draft(self, action: Action) -> None:
         source = self.center_pool if action.source == CENTER_SOURCE else self.factories[action.source]

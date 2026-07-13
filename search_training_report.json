@@ -1,0 +1,316 @@
+{
+  "method": "batched PUCT search-guided self-play",
+  "training_during_search": false,
+  "decision": "Freeze the policy/value snapshot during tree search and train between complete self-play generations.",
+  "hardware": "NVIDIA GeForce RTX 3080 10GB",
+  "baseline": {
+    "checkpoint": "checkpoints/best_score.pt",
+    "heuristic_300": {
+      "wins": 98,
+      "losses": 197,
+      "ties": 5,
+      "win_rate": 0.335,
+      "score": 84.92333333333333,
+      "opponent_score": 94.42333333333333,
+      "margin": -9.5
+    },
+    "fixed_seed_score_500_mean": 101.077
+  },
+  "selected": {
+    "source_checkpoint": "checkpoints/alphazero_v2/iteration_003.pt",
+    "alias": "checkpoints/best_search_policy.pt",
+    "config": {
+      "games_per_iteration": 32,
+      "simulations": 8,
+      "learning_rate": 0.00002,
+      "epochs": 1,
+      "replay_iterations": 2,
+      "bootstrap_games": 64
+    },
+    "heuristic_300": {
+      "wins": 113,
+      "losses": 187,
+      "ties": 0,
+      "win_rate": 0.37666666666666665,
+      "score": 86.21333333333334,
+      "opponent_score": 94.98666666666666,
+      "margin": -8.773333333333333
+    },
+    "fixed_seed_score_500": {
+      "mean": 100.302001953125,
+      "median": 103.0,
+      "p10": 83.0,
+      "p90": 112.0999755859375,
+      "max": 139
+    },
+    "puct_32_vs_heuristic_100": {
+      "wins": 37,
+      "losses": 61,
+      "ties": 2,
+      "win_rate": 0.38,
+      "margin": -7.88
+    },
+    "recommended_policy_search_vs_heuristic_300": {
+      "simulations": 8,
+      "heuristic_prior_weight": 0.5,
+      "wins": 165,
+      "losses": 130,
+      "ties": 5,
+      "win_rate": 0.5583333333333333,
+      "score": 91.84666666666666,
+      "opponent_score": 90.33,
+      "margin": 1.5166666666666666
+    }
+  },
+  "az2_calibration": {
+    "checkpoint": "training_runs/az2_value_bootstrap/latest.pt",
+    "architecture": "structured residual transformer with four value heads",
+    "search": "low-copy stochastic batched PUCT",
+    "performance": {
+      "snapshot_restore_5000": {
+        "deepcopy_seconds": 1.676,
+        "snapshot_restore_seconds": 0.127,
+        "speedup": 13.18
+      },
+      "search_16_roots_100_simulations": {
+        "legacy_seconds": 1.255,
+        "az2_seconds": 0.964,
+        "speedup": 1.30
+      },
+      "self_play_positions_per_second": {
+        "16_games_32_simulations": 37.63,
+        "64_games_8_simulations": 142.21
+      }
+    },
+    "same_seed_heuristic_128": {
+      "seed": 881000,
+      "simulations": 8,
+      "heuristic_prior_weight": 0.5,
+      "zero_value": {
+        "wins": 67,
+        "losses": 56,
+        "ties": 5,
+        "win_rate": 0.54296875,
+        "margin": 0.5859375
+      },
+      "quarter_value": {
+        "wins": 71,
+        "losses": 52,
+        "ties": 5,
+        "win_rate": 0.57421875,
+        "margin": 1.71875
+      },
+      "full_value": {
+        "wins": 63,
+        "losses": 65,
+        "ties": 0,
+        "win_rate": 0.4921875,
+        "margin": -1.375
+      }
+    },
+    "selected_value_utility_weight": 0.25,
+    "selection_reason": "The paired fixed-seed gate shows that partial value guidance helps, while full value guidance is not calibrated enough and hurts.",
+    "false_promotion_audit": {
+      "checkpoint": "training_runs/az2_value025_gate/accepted_0000.pt",
+      "preliminary_64": {
+        "win_rate": 0.546875,
+        "margin": 1.703125
+      },
+      "fresh_confirmation_128": {
+        "seed": 912000,
+        "win_rate": 0.421875,
+        "margin": -3.046875
+      },
+      "decision": "Do not use this candidate. Require an independent confirmation arena for all future promotions."
+    },
+    "original_long_run_failure": {
+      "directory": "training_runs/az2_long",
+      "iterations": 200,
+      "games_per_iteration": 128,
+      "simulations": 8,
+      "policy_weight": 0.05,
+      "value_utility_weight": 0.25,
+      "preliminary_arena_games": 128,
+      "confirmation_arena_games": 256,
+      "recent_league_games": 32,
+      "completed_updates": 9,
+      "accepted_updates": 0,
+      "arena_win_rates": [
+        0.4921875,
+        0.515625,
+        0.49609375,
+        0.49609375,
+        0.515625,
+        0.51171875,
+        0.4453125,
+        0.52734375,
+        0.46875
+      ],
+      "only_preliminary_pass_confirmation_rate": 0.486328125,
+      "target_audit": {
+        "mean_legal_actions": 8.21,
+        "mean_nonzero_target_actions": 3.5,
+        "one_hot_fraction": 0.1884,
+        "mean_target_entropy": 0.884,
+        "mean_max_probability": 0.634
+      },
+      "iteration_0": {
+        "selfplay_examples": 24461,
+        "positions_per_second": 143.88837675452527,
+        "arena_win_rate": 0.4921875,
+        "fixed_score": 101.1325,
+        "accepted": false,
+        "decision": "Correctly rejected and rolled back; replay retained for iteration 1."
+      },
+      "decision": "Stopped after nine updates. No promotion, worsening held-out value error, and sparse search targets showed that additional wall time on this configuration was not justified."
+    },
+    "two_stage_ablation": {
+      "value_checkpoint": "training_runs/value_direct_ablation.pt",
+      "value_architecture_change": "Zero-initialized direct observation-to-value residual, preserving old checkpoint behavior before calibration.",
+      "value_holdout": {
+        "weighted_mse_before": 0.129219,
+        "weighted_mse_selected": 0.106334,
+        "margin_mae_before": 0.3274,
+        "margin_mae_selected": 0.2838,
+        "win_mae_before": 0.9635,
+        "win_mae_selected": 0.8087
+      },
+      "value_stage_arena_32_simulations": {
+        "wins": 74,
+        "losses": 53,
+        "ties": 1,
+        "win_rate": 0.58203125,
+        "decision": "Use this checkpoint. A later checkpoint with lower regression error lost its direct search arena, so arena strength controls selection."
+      },
+      "deep_teacher_targets": {
+        "simulations": 32,
+        "dirichlet_fraction": 0.0,
+        "mean_nonzero_target_actions": 5.23,
+        "one_hot_fraction": 0.0928,
+        "mean_target_entropy": 1.066,
+        "mean_max_probability": 0.595
+      },
+      "selected_policy_candidate": {
+        "checkpoint": "training_runs/ablation_deep_teacher/candidate_0000.pt",
+        "arena_wins": 101,
+        "arena_losses": 87,
+        "arena_ties": 4,
+        "arena_win_rate": 0.5364583333333334,
+        "fixed_score": 101.21,
+        "decision": "Promising enough for a gated long run, but not treated as proof of convergence."
+      }
+    },
+    "replacement_long_run": {
+      "directory": "training_runs/az2_long_v2",
+      "iterations": 100,
+      "games_per_iteration": 64,
+      "simulations": 32,
+      "learning_rate": 0.00001,
+      "policy_weight": 1.0,
+      "value_weight": 0.0,
+      "dirichlet_fraction": 0.0,
+      "value_utility_weight": 0.25,
+      "replay_generations": 1,
+      "replay_max_examples": 20000,
+      "preliminary_arena_games": 64,
+      "confirmation_arena_games": 128,
+      "recent_league_games": 16,
+      "value_mae_allowance": 1.02,
+      "value_reference_checkpoint": "training_runs/az2_long_v2/value_reference.pt",
+      "starting_checkpoint": "training_runs/az2_long_v2/starting.pt",
+      "first_completed_update": {
+        "arena_wins": 31,
+        "arena_losses": 32,
+        "arena_ties": 1,
+        "arena_win_rate": 0.4921875,
+        "accepted": false
+      },
+      "decision": "Stopped after the first completed update was neutral. The replay was retained and the GPU was redirected to conservative policy-head distillation and search calibration."
+    },
+    "verified_65_champion": {
+      "checkpoint": "checkpoints/best_az2_search.pt",
+      "source_checkpoint": "training_runs/policy_distill_sharp50_epoch1.pt",
+      "sha256": "33C83E5FEA14B81893A3677E6249646E78DBFDBC5EDF589D25E7813BF9DE403E",
+      "training": {
+        "base": "training_runs/az2_long_v2/starting.pt",
+        "replay": "training_runs/az2_long_v2/replay/generation_0001.npz",
+        "teacher_simulations": 32,
+        "teacher_heuristic_prior_weight": 0.5,
+        "teacher_value_utility_weight": 0.25,
+        "dirichlet_fraction": 0.0,
+        "policy_head_only": true,
+        "epochs": 1,
+        "learning_rate": 0.0001,
+        "target_temperature": 0.5,
+        "hard_weight": 0.5,
+        "value_outputs_bit_exact": true
+      },
+      "parent_confirmation": {
+        "seed": 1430000,
+        "games": 128,
+        "simulations": 32,
+        "heuristic_prior_weight": 0.75,
+        "wins": 74,
+        "losses": 48,
+        "ties": 6,
+        "win_rate": 0.6015625,
+        "margin": 3.8515625
+      },
+      "deployment": {
+        "simulations": 128,
+        "heuristic_prior_weight": 0.75,
+        "value_utility_weight": 0.25,
+        "persistent_subtree_recovery": true
+      },
+      "heuristic_preliminary": {
+        "seed": 1520000,
+        "games": 64,
+        "wins": 42,
+        "losses": 20,
+        "ties": 2,
+        "win_rate": 0.671875,
+        "margin": 10.96875
+      },
+      "heuristic_independent_confirmation": {
+        "seed": 1530000,
+        "games": 128,
+        "wins": 83,
+        "losses": 44,
+        "ties": 1,
+        "win_rate": 0.65234375,
+        "score": 90.2109375,
+        "opponent_score": 82.875,
+        "margin": 7.3359375,
+        "margin_stderr": 1.6866805878651279
+      },
+      "combined_external_evidence": {
+        "games": 192,
+        "wins": 125,
+        "losses": 64,
+        "ties": 3,
+        "win_rate": 0.6588541666666666
+      },
+      "safety": {
+        "fixed_score_games": 500,
+        "fixed_score_mean": 100.407,
+        "parent_fixed_score_mean": 100.232,
+        "human_top1": 0.3886255924170616,
+        "parent_human_top1": 0.3886255924170616,
+        "value_outputs_bit_exact_to_parent": true
+      },
+      "decision": "Accepted as the verified policy-plus-search champion. The independent 128-game external confirmation itself clears 65%."
+    }
+  },
+  "negative_results": {
+    "uncalibrated_value": "Inherited score-return values saturated tanh and reduced 8-simulation PUCT to a 0.25 win rate over 50 games.",
+    "deep_ungated_training": "Sixteen-simulation ungated training peaked at 0.34 raw win rate and fell to 0.17 by iteration five.",
+    "arena_transfer": "The internally accepted gated checkpoint scored 0.315 against the external heuristic over 300 games, so it was not selected.",
+    "puct_depth": "The selected checkpoint reached 0.38 over 100 games at 32 simulations; the earlier 0.44 over 50 games did not persist at the larger sample.",
+    "full_heuristic_prior": "A 1.0 heuristic root-prior weight collapsed to 0.14 over 50 games; the verified deployment uses a complementary 0.5 blend.",
+    "blended_curriculum": "Three low-rate blended-search distillation iterations peaked at 0.395 as raw policies over 100 games. A candidate reached 0.57 in blended PUCT over 100 games but did not exceed the selected model's better-evidenced 300-game margin.",
+    "nonlinear_value_residual": "Reduced held-out and fresh-generation value error and won a 64-game preliminary 63.28%, but lost its fresh 128-game confirmation at 47.66%; regression error remains an invalid promotion proxy.",
+    "soft_overdistillation": "Thirty policy-head epochs reduced held-out visit KL but fell to 23.83% against the heuristic and 33.20% against its raw parent.",
+    "repeated_selfplay_updates": "A 75%-prior teacher candidate passed 67.19% over 32 games then confirmed at 44.92%; a balanced-prior repeat failed its preliminary at 37.5%.",
+    "opponent_conditioned_distillation": "A heuristic-state replay candidate scored 57.81% versus its incumbent's 59.38% on identical external seeds and was rejected."
+  }
+}

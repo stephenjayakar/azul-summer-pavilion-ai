@@ -10,7 +10,10 @@ def test_web_static_assets_and_opponent_catalog_exist():
     assert (STATIC_ROOT / "styles.css").is_file()
     assert (STATIC_ROOT / "app.js").is_file()
     ids = {opponent["id"] for opponent in available_opponents()}
-    assert {"competitive_hybrid", "score_neural", "heuristic", "random"} <= ids
+    assert {
+        "az2_search_champion", "competitive_hybrid", "score_neural",
+        "heuristic", "random",
+    } <= ids
     recommended = [opponent for opponent in available_opponents() if opponent["recommended"]]
     assert [opponent["id"] for opponent in recommended] == ["competitive_hybrid"]
     score_champions = [opponent for opponent in available_opponents() if opponent["score_champion"]]

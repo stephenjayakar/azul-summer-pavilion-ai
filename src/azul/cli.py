@@ -7,6 +7,8 @@ from .agents import (
     HybridAgent, HeuristicAgent, NeuralAgent, RandomAgent, RoleAgent, RolloutAgent, evaluate,
     evaluate_neural_batched, evaluate_self_play_batched,
 )
+from .alphazero import PUCTAgent
+from .az2 import AZ2Agent
 from .game import AzulGame, COLORS
 
 
@@ -24,9 +26,26 @@ def render(game: AzulGame) -> None:
         print(f"P{i} score={p.score} tiles=[{inv}] center={sum(c >= 0 for c in p.center)}/6 {stars}")
 
 
-def play(checkpoint: str | None, difficulty: str, mode: str) -> None:
+def play(
+    checkpoint: str | None, difficulty: str, mode: str, simulations: int = 32,
+    heuristic_prior_weight: float = 0.0, value_utility_weight: float = 1.0,
+) -> None:
     if checkpoint:
-        ai = HybridAgent(checkpoint) if mode == "hybrid" else NeuralAgent(checkpoint)
+        if mode in {"puct", "az2"}:
+            device = "cuda" if __import__("torch").cuda.is_available() else "cpu"
+            if mode == "az2":
+                ai = AZ2Agent(
+                    checkpoint, device=device, simulations=simulations,
+                    heuristic_prior_weight=heuristic_prior_weight,
+                    value_utility_weight=value_utility_weight,
+                )
+            else:
+                ai = PUCTAgent(
+                    checkpoint, device=device, simulations=simulations,
+                    heuristic_prior_weight=heuristic_prior_weight,
+                )
+        else:
+            ai = HybridAgent(checkpoint) if mode == "hybrid" else NeuralAgent(checkpoint)
     elif difficulty == "random":
         ai = RandomAgent()
     else:
@@ -68,13 +87,19 @@ def main():
     p = sub.add_parser("play", help="play against an agent")
     p.add_argument("--checkpoint")
     p.add_argument("--difficulty", choices=("random", "heuristic"), default="heuristic")
-    p.add_argument("--mode", choices=("hybrid", "neural"), default="hybrid",
+    p.add_argument("--mode", choices=("hybrid", "neural", "puct", "az2"), default="hybrid",
                    help="with a checkpoint, hybrid is the strongest playable mode")
+    p.add_argument("--simulations", type=int, default=32, help="PUCT simulations per AI move")
+    p.add_argument("--heuristic-prior-weight", type=float, default=0.0)
+    p.add_argument("--value-utility-weight", type=float, default=1.0)
     e = sub.add_parser("evaluate", help="benchmark a checkpoint")
     e.add_argument("checkpoint")
     e.add_argument("--opponent", choices=("random", "heuristic"), default="random")
     e.add_argument("--games", type=int, default=200)
-    e.add_argument("--mode", choices=("neural", "hybrid"), default="neural")
+    e.add_argument("--mode", choices=("neural", "hybrid", "puct", "az2"), default="neural")
+    e.add_argument("--simulations", type=int, default=32, help="PUCT simulations per AI move")
+    e.add_argument("--heuristic-prior-weight", type=float, default=0.0)
+    e.add_argument("--value-utility-weight", type=float, default=1.0)
     s = sub.add_parser("score", help="fixed-seed neural self-play score benchmark")
     s.add_argument("checkpoint")
     s.add_argument("--games", type=int, default=500)
@@ -91,12 +116,29 @@ def main():
     rs.add_argument("checkpoint"); rs.add_argument("--games", type=int, default=500)
     args = parser.parse_args()
     if args.cmd == "play":
-        play(args.checkpoint, args.difficulty, args.mode)
+        play(
+            args.checkpoint, args.difficulty, args.mode, args.simulations,
+            args.heuristic_prior_weight, args.value_utility_weight,
+        )
     elif args.cmd == "evaluate":
         opponent = RandomAgent(123) if args.opponent == "random" else HeuristicAgent(123)
         if args.mode == "hybrid":
             agent = HybridAgent(args.checkpoint)
             result = evaluate(agent, opponent, args.games)
+        elif args.mode in {"puct", "az2"}:
+            device = "cuda" if __import__("torch").cuda.is_available() else "cpu"
+            if args.mode == "az2":
+                agent = AZ2Agent(
+                    args.checkpoint, device=device, simulations=args.simulations,
+                    heuristic_prior_weight=args.heuristic_prior_weight,
+                    value_utility_weight=args.value_utility_weight,
+                )
+            else:
+                agent = PUCTAgent(
+                    args.checkpoint, device=device, simulations=args.simulations,
+                    heuristic_prior_weight=args.heuristic_prior_weight,
+                )
+            result = evaluate_neural_batched(agent, opponent, args.games)
         else:
             agent = NeuralAgent(args.checkpoint)
             result = evaluate_neural_batched(agent, opponent, args.games)

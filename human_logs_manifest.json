@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "raw_directory": "log/human_uploaded/raw",
+  "summary": {
+    "files": 25,
+    "parse_errors": 0,
+    "illegal_recorded_actions": 0,
+    "complete_outcome_games": 2,
+    "strong_partial_games": 2,
+    "limited_openings": 4,
+    "excluded_by_default": 17,
+    "replay_limitation": "All game_start seeds are null; use recorded observations directly rather than attempting exact RNG replay."
+  },
+  "complete_outcome": [
+    {
+      "file": "20260712T141339Z-7b8ddfe4a562.jsonl",
+      "actions": 181,
+      "human_actions": 91,
+      "opponent": "score_neural",
+      "scores": [89, 99],
+      "winner": 1
+    },
+    {
+      "file": "20260712T165821Z-3e4729775a25.jsonl",
+      "actions": 199,
+      "human_actions": 99,
+      "opponent": "score_neural",
+      "scores": [109, 86],
+      "winner": 0
+    }
+  ],
+  "strong_partial": [
+    {
+      "file": "20260711T061356Z-f4beac727a1b.jsonl",
+      "actions": 27,
+      "human_actions": 10,
+      "last_round": 2,
+      "reason": "replaced"
+    },
+    {
+      "file": "20260712T124119Z-907e600a4716.jsonl",
+      "actions": 22,
+      "human_actions": 11,
+      "last_round": 1,
+      "reason": "unfinished"
+    }
+  ],
+  "limited_opening": [
+    "20260711T061313Z-04c05da8cdf5.jsonl",
+    "20260711T061436Z-a042ff8a9575.jsonl",
+    "20260712T123625Z-e963fd332b66.jsonl",
+    "20260712T123635Z-a507708cb271.jsonl"
+  ],
+  "excluded_default": [
+    "20260712T123324Z-80a2d6500020.jsonl",
+    "20260712T123416Z-c02df6f76165.jsonl",
+    "20260712T123424Z-e39164165212.jsonl",
+    "20260712T140325Z-5e7e05d45d52.jsonl",
+    "20260712T140337Z-1193d798c714.jsonl",
+    "20260712T141335Z-a6c5a5dbadb1.jsonl",
+    "20260712T162602Z-c9fb43a0014d.jsonl",
+    "20260712T162910Z-86c004133345.jsonl",
+    "20260712T163056Z-5fc33f918a68.jsonl",
+    "20260712T163403Z-2909af3f31fb.jsonl",
+    "20260712T163414Z-e4583ceb3b4d.jsonl",
+    "20260712T163610Z-bfd34958c2c2.jsonl",
+    "20260712T163721Z-1f6f2f938b18.jsonl",
+    "20260712T163754Z-3cfa370ae9b8.jsonl",
+    "20260712T163759Z-1700b7a56455.jsonl",
+    "20260712T163806Z-f6060b126bfc.jsonl",
+    "20260712T165329Z-4d755a1e3d84.jsonl"
+  ]
+}

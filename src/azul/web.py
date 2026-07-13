@@ -20,6 +20,7 @@ from .agents import (
 )
 from .game import AzulGame, COLORS, decode_action
 from .game_log import GameLog
+from .az2 import AZ2Agent
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -46,7 +47,21 @@ def _rollout(relative: str):
     )
 
 
+def _az2(relative: str):
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    return AZ2Agent(
+        _checkpoint(relative), device=device, simulations=128,
+        heuristic_prior_weight=0.75, value_utility_weight=0.25,
+    )
+
+
 OPPONENTS: dict[str, tuple[str, str, Callable[[], object], str | None]] = {
+    "az2_search_champion": (
+        "AZ2 search champion",
+        "Verified research opponent: the structured policy with persistent 128-simulation search, calibrated value guidance, and a tactical root prior. Strongest measured match-play option, but substantially slower.",
+        lambda: _az2("checkpoints/best_az2_search.pt"),
+        "checkpoints/best_az2_search.pt",
+    ),
     "competitive_hybrid": (
         "Competitive hybrid",
         "Recommended match-play opponent: a rules-aware tactical filter with the competitive neural policy breaking close ties.",
